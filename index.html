@@ -264,7 +264,15 @@ footer a:hover{opacity:1;color:#ffd166}
 .loader .count{font-family:var(--serif);font-style:italic;font-size:22px;margin-top:10px}
 .seedspin{width:46px;height:46px;margin:0 auto 18px;animation:spin 2.4s linear infinite}
 
+/* ---------- Hành trình hạt giống (xem cây 3D) ---------- */
+.pill.grow{background:#2e7d4f;color:#fff}
+.viewer{position:fixed;inset:0;z-index:150;background:#06080d;opacity:0;pointer-events:none;transition:opacity .6s}
+.viewer.open{opacity:1;pointer-events:auto}
+.viewer iframe{width:100%;height:100%;border:0;display:block}
+body.viewer-open .cur-ring,body.viewer-open .cur-dot{display:none}
+
 @media (max-width:760px){
+  .pill{padding:9px 13px;font-size:12.5px}
   .chapters,.progress{display:none}
   .row{flex-wrap:wrap;gap:10px;bottom:3vh;padding:0 10px}
   .row .packet{width:42vw}
@@ -422,6 +430,7 @@ footer a:hover{opacity:1;color:#ffd166}
 <header class="nav">
   <a class="brand" href="#" id="brand"><b>Hạt Mầm</b><small>Ấn bản Mùa Gieo ’26</small></a>
   <div class="nav-right">
+    <button class="pill grow" id="growBtn">Xem cây lớn 🌱</button>
     <button class="pill" id="shopBtn">Cửa hàng</button>
     <button class="pill dark" id="cartBtn">Giỏ hàng <span class="badge" id="badge">0</span></button>
   </div>
@@ -447,6 +456,7 @@ footer a:hover{opacity:1;color:#ffd166}
   <button class="checkout" id="modalOk" style="margin-top:14px">Tiếp tục dạo vườn</button>
 </div></div>
 <div class="toast" id="toast"></div>
+<div class="viewer" id="viewer"></div>
 <div class="cur-ring" id="curRing"></div><div class="cur-dot" id="curDot"></div>
 <div class="loader" id="loader"><div class="half t"></div><div class="half b"></div>
   <div class="ctr"><div><svg class="seedspin" viewBox="-30 -30 60 60"><ellipse rx="12" ry="18" fill="#7a4a14"/><path d="M0-16 C8-30 22-30 26-26 C18-18 8-18 0-16Z" fill="#2e8b57"/></svg><b>Hạt Mầm</b><span>Đang gieo khu vườn</span><div class="count" id="count">0%</div></div></div>
@@ -1049,6 +1059,33 @@ $('#checkout').onclick = () => { openCart(false); setTimeout(() => { $('#modal')
 $('#modalOk').onclick = () => $('#modal').classList.remove('open');
 $('#newsForm').onsubmit = e => { e.preventDefault(); e.target.reset(); toast('Cảm ơn! (Bản minh họa, chưa gửi email thật)'); };
 renderCart();
+
+/* =========================================================
+   Hành trình hạt giống — mở hanh-trinh.html trong lớp phủ
+========================================================= */
+const viewer = $('#viewer'); let viewerTimer = 0;
+function openViewer() {
+  if (viewer.classList.contains('open')) return;
+  clearTimeout(viewerTimer);
+  viewer.innerHTML = '<iframe src="hanh-trinh.html" title="Hành trình của hạt giống"></iframe>';
+  viewer.classList.add('open'); document.body.classList.add('viewer-open');
+  document.documentElement.style.overflow = 'hidden';
+  viewer.firstChild.onload = () => viewer.firstChild.focus();
+}
+function closeViewer(then) {
+  if (!viewer.classList.contains('open')) return;
+  viewer.classList.remove('open'); document.body.classList.remove('viewer-open');
+  document.documentElement.style.overflow = '';
+  viewerTimer = setTimeout(() => { viewer.innerHTML = ''; if (then) then(); }, 600); // gỡ iframe để giải phóng WebGL
+}
+$('#growBtn').onclick = openViewer;
+addEventListener('message', e => {
+  if (!viewer.firstChild || e.source !== viewer.firstChild.contentWindow) return;
+  const m = e.data && e.data.hatmam;
+  if (m === 'close') closeViewer();
+  else if (m === 'shop') closeViewer(() => goTo(1));
+});
+addEventListener('keydown', e => { if (e.key === 'Escape') closeViewer(); });
 
 /* =========================================================
    Loader → start
