@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hạt Mầm — Ấn bản Mùa Gieo ’26</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;800;900&family=Playfair+Display:ital,wght@0,500;0,800;1,500;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c1a17; --paper:#f3ead9; --gold:#e8b64a;
+  --sans:'Be Vietnam Pro',system-ui,sans-serif; --serif:'Playfair Display',Georgia,serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#111;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+body.has-cursor, body.has-cursor *{cursor:none!important}
+button{font-family:inherit}
+#spacer{width:1px}
+.scene{position:fixed;inset:0;visibility:hidden;will-change:transform,clip-path}
+.stage{position:absolute;inset:0;overflow:hidden;transform-origin:50% 50%;will-change:transform}
+.shade{position:absolute;inset:0;background:#0b0a12;opacity:0;pointer-events:none}
+.layer{position:absolute;left:-6%;top:-6%;width:112%;height:112%;will-change:transform;transform-origin:50% 70%}
+.layer svg{width:100%;height:100%;display:block}
+
+/* ---------- grain overlay ---------- */
+#grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:60;opacity:.13;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .3  0 0 0 0 .25  0 0 0 0 .2  0 0 0 1.1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation:grain 1.2s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:40}
+
+/* ---------- UI chrome ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:70;display:flex;align-items:flex-start;justify-content:space-between;padding:22px 30px;pointer-events:none;mix-blend-mode:normal}
+.brand{pointer-events:auto;color:#fff;text-decoration:none;line-height:1;text-shadow:0 1px 12px rgba(0,0,0,.25);transition:color .6s}
+.brand b{display:block;font-family:var(--serif);font-weight:800;font-size:26px;letter-spacing:-.5px}
+.brand small{display:block;font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;margin-top:6px;opacity:.85}
+.nav-right{display:flex;gap:10px;pointer-events:auto}
+.pill{border:0;border-radius:999px;padding:11px 18px;font-weight:600;font-size:13.5px;background:rgba(255,255,255,.88);color:#1b1b1b;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;gap:8px;transition:transform .3s cubic-bezier(.3,1.6,.5,1),background .3s}
+.pill:hover{transform:scale(1.06)}
+.pill.dark{background:#1b1b1b;color:#fff}
+.badge{min-width:20px;height:20px;border-radius:10px;background:#ff4f8b;color:#fff;font-size:11px;display:inline-grid;place-items:center;padding:0 6px;transition:transform .35s cubic-bezier(.3,1.8,.5,1)}
+.badge.bump{transform:scale(1.5)}
+.chapters{position:fixed;left:30px;bottom:30px;z-index:70;mix-blend-mode:difference;list-style:none;margin:0;padding:0;font-size:11.5px;letter-spacing:.3px}
+.chapters li{color:rgba(255,255,255,.55);padding:3px 0;display:flex;align-items:center;gap:10px;cursor:pointer;transition:color .4s,transform .4s;}
+.chapters li::before{content:"";width:14px;height:1px;background:currentColor;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.chapters li.on{color:#fff;transform:translateX(4px)}
+.chapters li.on::before{width:34px}
+.progress{position:fixed;right:30px;bottom:30px;z-index:70;mix-blend-mode:difference;width:3px;height:120px;background:rgba(255,255,255,.25);border-radius:3px;overflow:hidden}
+.progress i{position:absolute;left:0;top:0;width:100%;background:#fff;border-radius:3px}
+
+/* ---------- headlines ---------- */
+.mega{font-family:var(--sans);font-weight:900;letter-spacing:-.045em;line-height:.86;margin:0;white-space:nowrap;pointer-events:none}
+.mega .ch{display:inline-block;will-change:transform,opacity}
+.eyebrow{font-size:12px;letter-spacing:3px;text-transform:uppercase;font-weight:600}
+.lede{font-family:var(--serif);font-style:italic;font-size:clamp(17px,1.6vw,23px);line-height:1.35}
+
+/* ---------- seed packets ---------- */
+.packet{width:clamp(170px,15vw,224px);border-radius:20px;overflow:hidden;position:relative;color:#1b1b1b;
+  background:linear-gradient(160deg,var(--c1),var(--c2));box-shadow:0 30px 60px -20px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.35) inset;will-change:transform;transform-style:preserve-3d}
+.packet::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.45) 0%,rgba(255,255,255,0) 35%,rgba(255,255,255,0) 70%,rgba(255,255,255,.18));pointer-events:none}
+.packet .zig{height:10px;background:radial-gradient(circle at 6px -2px,transparent 6px,rgba(255,255,255,.75) 6.5px) 0 0/12px 10px repeat-x}
+.pk-art{height:clamp(120px,10.5vw,158px);display:grid;place-items:center;position:relative}
+.pk-art::before{content:"";position:absolute;width:72%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.42)}
+.pk-art svg{position:relative;width:78%;height:92%;overflow:visible;filter:drop-shadow(0 8px 10px rgba(0,0,0,.18))}
+.pk-meta{padding:10px 15px 15px;background:rgba(255,253,247,.86)}
+.pk-latin{font-family:var(--serif);font-style:italic;font-size:12px;opacity:.6}
+.pk-meta h3{margin:2px 0 8px;font-size:clamp(14px,1.15vw,16.5px);font-weight:800;letter-spacing:-.2px;line-height:1.15}
+.pk-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pk-row b{font-size:15px}
+.pk-row small{display:block;font-size:10.5px;opacity:.55;font-weight:400}
+.add{border:0;background:#1b1b1b;color:#fff;border-radius:999px;padding:8px 13px;font-size:12.5px;font-weight:600;transition:transform .3s cubic-bezier(.3,1.7,.5,1),background .3s}
+.add:hover{transform:scale(1.1);background:#ff4f8b}
+.add:active{transform:scale(.92)}
+.tag{position:absolute;top:18px;left:14px;font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;background:#1b1b1b;color:#fff;padding:5px 9px;border-radius:999px;z-index:2}
+
+/* ---------- Scene 1: forest ---------- */
+#s-forest .stage{background:var(--paper)}
+.intro{position:absolute;inset:0;pointer-events:none;color:var(--ink)}
+.intro .ed{position:absolute;left:30px;top:110px;font-family:var(--serif);font-size:clamp(14px,1.2vw,17px);line-height:1.25}
+.intro .ed i{display:block;font-size:clamp(30px,3.4vw,52px);font-weight:500;line-height:1.02;max-width:12ch;margin-top:10px}
+.intro .hint{position:absolute;right:30px;top:120px;text-align:right;font-size:12px;letter-spacing:2px;text-transform:uppercase}
+.intro .mouse{width:22px;height:36px;border:1.5px solid var(--ink);border-radius:12px;margin:12px 0 0 auto;position:relative}
+.intro .mouse::after{content:"";position:absolute;left:50%;top:7px;width:3px;height:7px;border-radius:2px;background:var(--ink);transform:translateX(-50%);animation:wheel 1.6s infinite}
+@keyframes wheel{0%{opacity:0;transform:translate(-50%,0)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,12px)}}
+.intro .vert{position:absolute;right:30px;bottom:34px;font-size:11px;line-height:1.7;text-align:right;opacity:.7}
+.portal{position:absolute;inset:0;overflow:hidden;will-change:clip-path}
+.portal-inner{position:absolute;inset:0;will-change:transform}
+.sky{position:absolute;inset:0;background:linear-gradient(180deg,#6fa3d6 0%,#a9cbe6 38%,#f2dfc0 72%,#f6cf9b 100%)}
+.cloud{position:absolute;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.95),rgba(255,255,255,.75) 55%,rgba(255,255,255,0));filter:blur(2px);will-change:transform}
+.puffs{position:absolute;inset:0;pointer-events:none}
+.puff{position:absolute;border-radius:50%;background:radial-gradient(closest-side,#fff 0%,rgba(255,255,255,.9) 45%,rgba(255,255,255,0) 100%);will-change:transform}
+.forest-copy{position:absolute;left:0;right:0;top:15vh;text-align:center;color:#fff;will-change:transform}
+.forest-copy .mega{font-size:clamp(84px,17vw,300px);text-shadow:0 6px 40px rgba(40,50,20,.35)}
+.forest-copy .eyebrow{display:block;margin-bottom:14px;text-shadow:0 1px 10px rgba(0,0,0,.3)}
+.forest-copy .lede{max-width:520px;margin:18px auto 0;text-shadow:0 1px 14px rgba(0,0,0,.45)}
+.row{position:absolute;left:0;right:0;bottom:6vh;display:flex;justify-content:center;gap:clamp(12px,1.8vw,26px);perspective:1200px}
+
+/* ---------- Scene 2: flowers ---------- */
+#s-flower .stage{background:linear-gradient(180deg,#f7a8c4 0%,#ffc9a8 40%,#ffe9b0 62%,#c9e6ff 100%)}
+.flower-hills{position:absolute;inset:0}
+.hoa{position:absolute;left:0;right:0;top:9vh;text-align:center;color:#fff;font-size:clamp(150px,33vw,560px)}
+.hoa .ch{background:linear-gradient(180deg,#fff 30%,#ffd1e4 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 10px 30px rgba(196,40,100,.3))}
+.flower-field{position:absolute;inset:0;will-change:transform,opacity;transform-origin:50% 100%}
+.flower-field svg{width:100%;height:100%;display:block}
+.flower-field .st{transform-box:fill-box;transform-origin:50% 100%}
+.flower-field .hd{transform-box:fill-box;transform-origin:50% 50%}
+.fl-copy{position:absolute;left:30px;top:18vh;max-width:330px;color:#3a1830}
+.fl-copy .lede{margin-top:10px}
+.ring-wrap{position:absolute;inset:0;display:grid;place-items:center;perspective:1500px;pointer-events:none}
+.ring{position:relative;width:1px;height:1px;transform-style:preserve-3d;will-change:transform}
+.ring .packet{position:absolute;left:0;top:0;margin-left:calc(clamp(170px,15vw,224px)/-2);margin-top:-170px;pointer-events:auto}
+.ring-cap{position:absolute;left:0;right:0;bottom:5vh;text-align:center;color:#3a1830;font-size:13px;letter-spacing:2px;text-transform:uppercase;font-weight:600}
+
+/* ---------- Scene 3: veg ---------- */
+.tear{position:absolute;left:0;right:0;top:-58px;height:60px;pointer-events:none}
+.tear svg{width:100%;height:100%;display:block}
+#s-veg .stage{background:linear-gradient(180deg,#ffcf6e 0%,#ffa45c 45%,#f58357 70%,#d9663f 100%)}
+.sun{position:absolute;width:34vmin;height:34vmin;border-radius:50%;left:58%;top:16%;background:radial-gradient(circle,#fff6c9 0%,#ffe27a 45%,#ffbf4a 70%,rgba(255,170,70,0) 71%);box-shadow:0 0 120px 60px rgba(255,214,120,.45)}
+.billboard{position:absolute;right:7vw;top:13vh;width:clamp(240px,27vw,420px);transform-origin:50% 100%;will-change:transform}
+.bb-board{background:linear-gradient(135deg,#1f5b3a,#2e7d4f);border:6px solid #f7e7c4;border-radius:6px;padding:18px 22px;color:#ffe9a8;box-shadow:0 20px 40px -10px rgba(60,20,0,.45)}
+.bb-board b{font-family:var(--serif);font-style:italic;font-size:clamp(24px,2.6vw,40px);display:block;line-height:1}
+.bb-board span{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#fff;opacity:.85;display:block;margin-top:8px}
+.bb-legs{display:flex;justify-content:space-around;height:16vh}
+.bb-legs i{width:12px;background:linear-gradient(90deg,#6b4a2d,#8f6a43);display:block}
+.veg-title{position:absolute;left:4vw;top:16vh;color:#1e4a2c;font-size:clamp(90px,15vw,260px)}
+.veg-title .ch{text-shadow:4px 4px 0 #ffe9b0,8px 8px 0 rgba(120,40,10,.25)}
+.veg-pop{position:absolute;left:0;right:0;bottom:0;height:60vh;pointer-events:none}
+.veg-pop .v{position:absolute;bottom:4vh;width:clamp(110px,15vw,230px);aspect-ratio:1;will-change:transform}
+.veg-pop .v svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 18px 18px rgba(80,20,0,.3))}
+.soil{position:absolute;left:-5%;right:-5%;bottom:-2vh;height:16vh;background:radial-gradient(120% 100% at 50% 0%,#6b3a1e 0%,#4a2612 60%,#2e170b 100%);border-radius:50% 50% 0 0/40% 40% 0 0}
+.veg-copy{position:absolute;left:4.4vw;top:calc(16vh + clamp(90px,15vw,260px)*.95);max-width:360px;color:#3a1a08}
+.veg-row{bottom:4vh}
+
+/* ---------- Scene 4: herbs ---------- */
+#s-herb .stage{background:radial-gradient(80% 70% at 70% 30%,#3b2a7a 0%,#1a1747 45%,#090a22 100%)}
+.nebula{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;will-change:transform}
+.herb-title{position:absolute;left:5vw;top:17vh;font-size:clamp(90px,15vw,260px)}
+.herb-title .ch{background:linear-gradient(180deg,#fff3c4 0%,#f4c24f 45%,#b57a1c 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 30px rgba(255,200,90,.35))}
+.herb-copy{position:absolute;left:5.3vw;top:calc(17vh + clamp(90px,15vw,260px)*.95);max-width:380px;color:#e8e2ff}
+.sphere-wrap{position:absolute;right:9vw;top:14vh;width:clamp(220px,30vw,460px);aspect-ratio:1;perspective:1000px}
+.sphere{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+.sphere i{position:absolute;inset:0;border-radius:50%;border:3px solid #e9b850;box-shadow:0 0 18px rgba(255,200,90,.5),inset 0 0 18px rgba(255,200,90,.25)}
+.sphere .core{position:absolute;left:41%;top:41%;width:18%;height:18%;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff7d6,#f0b545 50%,#8a5410);box-shadow:0 0 50px 10px rgba(255,190,80,.6)}
+.sprig{position:absolute;bottom:-2vh;width:clamp(120px,16vw,260px);height:55vh;transform-origin:50% 100%;will-change:transform}
+.sprig svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 14px rgba(140,255,190,.35))}
+.herb-row .packet{background:linear-gradient(160deg,rgba(255,255,255,.22),rgba(255,255,255,.06));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#fff;box-shadow:0 30px 60px -20px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.25) inset}
+.herb-row .pk-meta{background:rgba(10,10,40,.45)}
+.herb-row .add{background:#f4c24f;color:#1b1b1b}
+
+/* ---------- Scene 5: fruits ---------- */
+#s-fruit .stage{background:#e9d6b4}
+.dome{position:absolute;left:50%;top:50%;width:170vmax;height:170vmax;margin:-85vmax 0 0 -85vmax;border-radius:50%;will-change:transform;
+  background:
+    radial-gradient(circle,transparent 0 13.5%,#8a6a3e 13.6% 14.6%,transparent 14.7%),
+    repeating-conic-gradient(from 0deg,rgba(90,60,25,.55) 0deg 1.4deg,transparent 1.4deg 15deg),
+    repeating-radial-gradient(circle,#f1e2c2 0 3.2%,#d9bf8e 3.2% 4.4%,#b9935b 4.4% 4.9%,#f1e2c2 4.9% 5.6%),
+    radial-gradient(circle,#f3e5c8,#c9a46c);
+  box-shadow:inset 0 0 25vmax rgba(60,35,10,.55)}
+.dome::after{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(from 7.5deg,rgba(255,240,210,.35) 0deg 2deg,transparent 2deg 15deg);mask:radial-gradient(circle,transparent 14.6%,#000 15%);-webkit-mask:radial-gradient(circle,transparent 14.6%,#000 15%)}
+.oculus{position:absolute;left:50%;top:50%;width:46vmax;height:46vmax;margin:-23vmax 0 0 -23vmax;border-radius:50%;overflow:hidden;will-change:transform;
+  background:radial-gradient(circle at 50% 60%,#cfe8ff 0%,#8fc1ec 45%,#5e95d4 100%);box-shadow:inset 0 0 6vmax rgba(30,50,90,.45)}
+.oculus .cloud{opacity:.95}
+.dove{position:absolute;width:clamp(70px,8vw,130px);will-change:transform}
+.dove svg{width:100%;overflow:visible}
+.dove .w1{transform-origin:46% 52%;animation:flap .5s ease-in-out infinite alternate}
+.dove .w2{transform-origin:46% 52%;animation:flap .5s ease-in-out infinite alternate-reverse}
+@keyframes flap{from{transform:scaleY(1)}to{transform:scaleY(-.55)}}
+.fruit-title{position:absolute;left:0;right:0;top:12vh;text-align:center;color:#fff;font-size:clamp(90px,15vw,250px)}
+.fruit-title .ch{text-shadow:0 0 0 #ff6b4a,5px 6px 0 #ff6b4a,10px 12px 0 rgba(120,30,40,.35)}
+.fruit-copy{position:absolute;left:0;right:0;top:calc(12vh + clamp(90px,15vw,250px)*.92);text-align:center;color:#fff;text-shadow:0 2px 16px rgba(30,40,80,.5)}
+.hang{position:absolute;left:0;right:0;top:0;display:flex;justify-content:center;gap:clamp(14px,2.2vw,34px);pointer-events:none}
+.hanger{display:flex;flex-direction:column;align-items:center;transform-origin:50% 0;will-change:transform;pointer-events:auto}
+.hanger .string{width:2px;background:linear-gradient(#5a3a1a,#a07a4a)}
+.hanger .packet{margin-top:-2px}
+
+/* ---------- Scene 6: grow ---------- */
+#s-grow .stage{background:#f6ecd8}
+.track{position:absolute;top:0;left:0;height:100%;display:flex;will-change:transform}
+.panel{width:100vw;height:100%;flex:none;padding:20vh 0 0 7vw;position:relative}
+.panel .num{font-family:var(--serif);font-style:italic;font-size:clamp(70px,10vw,170px);line-height:.9;opacity:.9}
+.panel h2{font-size:clamp(46px,6.4vw,110px);font-weight:900;letter-spacing:-.04em;margin:8px 0 14px;line-height:.9}
+.panel p{max-width:400px;font-size:16px;line-height:1.6;opacity:.85}
+.panel ul{padding:0;margin:20px 0 0;list-style:none;display:flex;gap:10px;flex-wrap:wrap;max-width:440px}
+.panel li{border:1.5px solid currentColor;border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600}
+.plant{position:absolute;right:9vw;bottom:0;width:clamp(260px,34vw,520px);height:86vh;pointer-events:none}
+.plant svg{width:100%;height:100%;overflow:visible}
+.pot-shadow{filter:drop-shadow(0 30px 30px rgba(0,0,0,.25))}
+
+/* ---------- Scene 7: final ---------- */
+#s-final .stage{background:radial-gradient(120% 90% at 20% 0%,#ff5f8f 0%,#a2246e 35%,#2a0f3c 75%,#140820 100%);color:#fff}
+.final-inner{position:absolute;left:0;right:0;top:0;will-change:transform}
+.marquee{white-space:nowrap;font-weight:900;font-size:clamp(90px,16vw,280px);letter-spacing:-.05em;line-height:1;padding-top:14vh;will-change:transform}
+.marquee span{-webkit-text-stroke:2px #fff;color:transparent}
+.marquee em{font-family:var(--serif);font-weight:500;color:#ffd166}
+.final-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:6vw;padding:6vh 7vw 0;align-items:start}
+.final-grid h3{font-family:var(--serif);font-weight:500;font-style:italic;font-size:clamp(30px,3.4vw,54px);line-height:1.05;margin:0 0 20px}
+.news{display:flex;gap:10px;max-width:520px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:6px}
+.news input{flex:1;border:0;background:transparent;color:#fff;font:inherit;font-size:15px;padding:0 16px;outline:none;min-width:0}
+.news input::placeholder{color:rgba(255,255,255,.6)}
+.news button{border:0;border-radius:999px;background:#ffd166;color:#2a0f3c;font-weight:800;padding:13px 22px;font-size:14px}
+.perks{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.perk{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:18px}
+.perk b{display:block;font-size:30px;font-weight:900;letter-spacing:-1px}
+.perk span{font-size:13px;opacity:.8}
+.seal{position:absolute;right:7vw;top:6vh;width:clamp(110px,11vw,170px);aspect-ratio:1}
+.seal svg{width:100%;height:100%;animation:spin 18s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+footer{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:4vw;padding:12vh 7vw 6vh;font-size:13.5px;line-height:2}
+footer h4{font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:.6;margin:0 0 8px}
+footer a{color:#fff;text-decoration:none;opacity:.85;display:block}
+footer a:hover{opacity:1;color:#ffd166}
+.footer-big{font-family:var(--serif);font-weight:800;font-size:clamp(70px,12vw,200px);line-height:.8;letter-spacing:-3px;padding:0 7vw 4vh;opacity:.95}
+.copy{padding:0 7vw 4vh;font-size:12px;opacity:.55;display:flex;justify-content:space-between}
+
+/* ---------- cart drawer ---------- */
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(430px,100vw);background:#fbf6ec;z-index:90;transform:translateX(105%);transition:transform .7s cubic-bezier(.7,0,.2,1);display:flex;flex-direction:column;box-shadow:-30px 0 60px rgba(0,0,0,.25)}
+.drawer.open{transform:none}
+.scrim{position:fixed;inset:0;background:rgba(15,10,20,.45);z-index:85;opacity:0;pointer-events:none;transition:opacity .6s}
+.scrim.open{opacity:1;pointer-events:auto}
+.dr-head{display:flex;justify-content:space-between;align-items:center;padding:24px 26px;border-bottom:1px solid #e8dcc6}
+.dr-head h3{margin:0;font-family:var(--serif);font-size:28px;font-style:italic;font-weight:500}
+.x{border:0;background:#1b1b1b;color:#fff;width:38px;height:38px;border-radius:50%;font-size:18px}
+.dr-list{flex:1;overflow:auto;padding:10px 26px}
+.item{display:flex;gap:14px;align-items:center;padding:14px 0;border-bottom:1px dashed #e2d4bb;animation:itemIn .5s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes itemIn{from{opacity:0;transform:translateX(30px)}}
+.item .thumb{width:62px;height:62px;border-radius:14px;flex:none;display:grid;place-items:center;background:linear-gradient(160deg,var(--c1),var(--c2))}
+.item .thumb svg{width:80%;height:80%;overflow:visible}
+.item .nm{flex:1;font-weight:700;font-size:14.5px}
+.item .nm small{display:block;font-weight:400;opacity:.6;font-size:12px;margin-top:2px}
+.qty{display:flex;align-items:center;gap:8px;font-weight:700}
+.qty button{width:26px;height:26px;border-radius:50%;border:1.5px solid #1b1b1b;background:transparent;font-weight:800}
+.empty{text-align:center;padding:60px 10px;opacity:.6;font-family:var(--serif);font-style:italic;font-size:19px}
+.dr-foot{padding:20px 26px 26px;border-top:1px solid #e8dcc6}
+.sum{display:flex;justify-content:space-between;font-size:15px;margin-bottom:6px}
+.sum.total{font-size:22px;font-weight:900;margin:10px 0 16px}
+.checkout{width:100%;border:0;border-radius:999px;padding:17px;font-size:16px;font-weight:800;background:linear-gradient(90deg,#ff4f8b,#ff9f43);color:#fff;transition:transform .3s}
+.checkout:hover{transform:scale(1.02)}
+.checkout:disabled{opacity:.4}
+.fly{position:fixed;z-index:95;width:26px;height:26px;border-radius:50%;pointer-events:none;background:radial-gradient(circle at 35% 30%,#fff2b5,#c8892c 60%,#7a4a14);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.toast{position:fixed;left:50%;bottom:30px;z-index:96;transform:translate(-50%,140%);background:#1b1b1b;color:#fff;padding:13px 20px;border-radius:999px;font-size:14px;font-weight:600;transition:transform .55s cubic-bezier(.3,1.5,.5,1)}
+.toast.show{transform:translate(-50%,0)}
+.modal{position:fixed;inset:0;z-index:98;display:grid;place-items:center;background:rgba(15,10,20,.55);opacity:0;pointer-events:none;transition:opacity .5s}
+.modal.open{opacity:1;pointer-events:auto}
+.modal-card{background:#fbf6ec;border-radius:28px;padding:40px 44px;max-width:440px;text-align:center;transform:scale(.8) translateY(30px);transition:transform .7s cubic-bezier(.3,1.5,.4,1)}
+.modal.open .modal-card{transform:none}
+.modal-card h3{font-family:var(--serif);font-style:italic;font-weight:500;font-size:36px;margin:10px 0}
+.modal-card p{line-height:1.6;opacity:.8}
+.modal-card svg{width:120px;height:120px}
+
+/* ---------- cursor & loader ---------- */
+.cur-dot,.cur-ring{position:fixed;left:0;top:0;z-index:100;pointer-events:none;border-radius:50%;will-change:transform}
+.cur-dot{width:8px;height:8px;margin:-4px 0 0 -4px;background:#fff;mix-blend-mode:difference}
+.cur-ring{width:44px;height:44px;margin:-22px 0 0 -22px;border:1.5px solid #fff;mix-blend-mode:difference;transition:width .35s,height .35s,margin .35s,background .35s}
+.cur-ring.big{width:84px;height:84px;margin:-42px 0 0 -42px;background:#fff}
+.loader{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;pointer-events:none}
+.loader .half{flex:1;background:#f3ead9;transition:transform 1.1s cubic-bezier(.8,0,.15,1)}
+.loader.done .half.t{transform:translateY(-100%)}
+.loader.done .half.b{transform:translateY(100%)}
+.loader .ctr{position:absolute;inset:0;display:grid;place-items:center;text-align:center;transition:opacity .4s}
+.loader.done .ctr{opacity:0}
+.loader .ctr b{font-family:var(--serif);font-size:clamp(46px,7vw,96px);font-weight:800;letter-spacing:-2px;display:block}
+.loader .ctr span{font-size:12px;letter-spacing:3px;text-transform:uppercase}
+.loader .count{font-family:var(--serif);font-style:italic;font-size:22px;margin-top:10px}
+.seedspin{width:46px;height:46px;margin:0 auto 18px;animation:spin 2.4s linear infinite}
+
+@media (max-width:760px){
+  .chapters,.progress{display:none}
+  .row{flex-wrap:wrap;gap:10px;bottom:3vh;padding:0 10px}
+  .row .packet{width:42vw}
+  .row .pk-art{height:90px}
+  .final-grid,footer{grid-template-columns:1fr}
+  .billboard{display:none}
+  .fl-copy{top:auto;bottom:6vh}
+}
+</style>
+</head>
+<body>
+<div id="spacer"></div>
+
+<!-- ===== 1. KHU VƯỜN ===== -->
+<section class="scene" id="s-forest" data-len="4" data-enter="none" data-name="Khu Vườn">
+  <div class="stage">
+    <div class="intro" id="intro">
+      <div class="ed">Ấn bản Mùa Gieo ’26<i>Mỗi hạt giống là một khu vườn đang chờ.</i></div>
+      <div class="hint">Cuộn để bước vào<div class="mouse"></div></div>
+      <div class="vert">Cây thân gỗ<br>Hoa<br>Rau củ<br>Thảo mộc<br>Trái ngọt<br>Gieo trồng</div>
+    </div>
+    <div class="portal" id="portal">
+      <div class="portal-inner" id="forestInner">
+        <div class="sky"></div>
+        <div id="forestClouds"></div>
+        <div class="layer" id="fFar"></div>
+        <div class="layer" id="fMid"></div>
+        <div class="forest-copy" id="forestCopy">
+          <span class="eyebrow">Chương I — Cây thân gỗ</span>
+          <h1 class="mega" data-split>Khu Vườn</h1>
+          <p class="lede" id="forestLede">Hơn 120 giống cây: thông Ý, phong lá đỏ, anh đào, bách tán… Gieo một hạt hôm nay, có bóng mát cho mười năm sau.</p>
+        </div>
+        <div class="layer" id="fNear"></div>
+        <div class="row" id="treeRow"></div>
+      </div>
+    </div>
+    <div class="puffs" id="puffs"></div>
+  </div>
+  <div class="shade"></div>
+</section>
+
+<!-- ===== 2. HOA ===== -->
+<section class="scene" id="s-flower" data-len="4.4" data-enter="circle" data-name="Hoa">
+  <div class="stage">
+    <div id="flowerClouds"></div>
+    <div class="flower-hills" id="flowerHills"></div>
+    <h2 class="mega hoa" data-split id="hoaTitle">Hoa</h2>
+    <div class="fl-copy" id="flCopy">
+      <span class="eyebrow">Chương II — Vườn hoa</span>
+      <p class="lede">Hồng cổ, hướng dương, tulip, oải hương. Mỗi gói hạt là một mùa hoa, tự tay bạn gieo.</p>
+    </div>
+    <div class="flower-field" id="flowerField"></div>
+    <div class="ring-wrap"><div class="ring" id="ring"></div></div>
+    <div class="ring-cap" id="ringCap">Cuộn để xoay bộ sưu tập ✿</div>
+  </div>
+  <div class="shade"></div>
+</section>
+
+<!-- ===== 3. RAU CỦ ===== -->
+<section class="scene" id="s-veg" data-len="3.8" data-enter="tear" data-name="Rau củ">
+  <div class="tear"><svg viewBox="0 0 1600 60" preserveAspectRatio="none" id="tearSvg"></svg></div>
+  <div class="stage">
+    <div class="sun" id="sun"></div>
+    <div class="layer" id="vegHills"></div>
+    <div class="billboard" id="billboard">
+      <div class="bb-board"><b>Tươi từ hạt.</b><span>Gieo hôm nay · Hái sau 30 ngày</span></div>
+      <div class="bb-legs"><i></i><i></i></div>
+    </div>
+    <h2 class="mega veg-title" data-split id="vegTitle">Vườn Rau</h2>
+    <div class="veg-copy" id="vegCopy"><span class="eyebrow">Chương III — Rau củ</span><p class="lede">Ban công nhỏ cũng đủ cho một vườn rau sạch. Hạt F1 nảy mầm khỏe, hợp khí hậu nhiệt đới.</p></div>
+    <div class="soil"></div>
+    <div class="veg-pop" id="vegPop"></div>
+    <div class="row veg-row" id="vegRow"></div>
+  </div>
+  <div class="shade"></div>
+</section>
+
+<!-- ===== 4. THẢO MỘC ===== -->
+<section class="scene" id="s-herb" data-len="3.8" data-enter="iris" data-name="Thảo mộc">
+  <div class="stage">
+    <div class="nebula" style="width:60vmax;height:40vmax;left:-10vmax;top:30vh;background:#2fb7a3"></div>
+    <div class="nebula" style="width:50vmax;height:50vmax;right:-15vmax;top:-10vh;background:#9b4dff"></div>
+    <div class="nebula" style="width:40vmax;height:30vmax;left:40vw;bottom:-10vh;background:#ff6fae"></div>
+    <div class="sphere-wrap"><div class="sphere" id="sphere"><i></i><i></i><i></i><i></i><i></i><div class="core"></div></div></div>
+    <h2 class="mega herb-title" data-split id="herbTitle">Thảo Mộc</h2>
+    <div class="herb-copy" id="herbCopy"><span class="eyebrow">Chương IV — Gia vị &amp; thảo dược</span><p class="lede">Húng quế, bạc hà, tía tô, hương thảo. Một khay nhỏ bên bậu cửa, căn bếp thơm cả năm.</p></div>
+    <div id="sprigs"></div>
+    <div class="row herb-row" id="herbRow"></div>
+  </div>
+  <div class="shade"></div>
+</section>
+
+<!-- ===== 5. TRÁI NGỌT ===== -->
+<section class="scene" id="s-fruit" data-len="3.8" data-enter="circleTop" data-name="Trái ngọt">
+  <div class="stage">
+    <div class="dome" id="dome"></div>
+    <div class="oculus" id="oculus"><div id="ocClouds"></div></div>
+    <div id="doves"></div>
+    <h2 class="mega fruit-title" data-split id="fruitTitle">Trái Ngọt</h2>
+    <div class="fruit-copy lede" id="fruitCopy">Dâu tây, dưa lưới, chanh dây, dưa hấu ruột vàng, hái ngay trong vườn nhà.</div>
+    <div class="hang" id="hang"></div>
+  </div>
+  <div class="shade"></div>
+</section>
+
+<!-- ===== 6. GIEO TRỒNG ===== -->
+<section class="scene" id="s-grow" data-len="4.6" data-enter="slide" data-name="Gieo trồng">
+  <div class="stage" id="growStage">
+    <div class="track" id="track">
+      <div class="panel" style="color:#5a3412"><div class="num">01</div><h2>Gieo hạt</h2><p>Ngâm hạt 4–6 giờ trong nước ấm. Gieo sâu gấp hai lần kích thước hạt, phủ một lớp đất mỏng.</p><ul><li>Đất tơi xốp</li><li>Nước ấm 35°C</li><li>Khay ươm</li></ul></div>
+      <div class="panel" style="color:#1f5a32"><div class="num">02</div><h2>Nảy mầm</h2><p>Sau 3–7 ngày, mầm xanh đội đất lên. Giữ ẩm bằng bình phun sương, đặt nơi có nắng nhẹ buổi sáng.</p><ul><li>Phun sương 2 lần/ngày</li><li>Nắng sớm</li></ul></div>
+      <div class="panel" style="color:#123d5a"><div class="num">03</div><h2>Lớn lên</h2><p>Khi cây có 4 lá thật, sang chậu lớn hơn. Bón phân hữu cơ mỗi hai tuần, tưới gốc thay vì tưới lá.</p><ul><li>Phân trùn quế</li><li>Chậu 20cm</li><li>Tưới gốc</li></ul></div>
+      <div class="panel" style="color:#7a1846"><div class="num">04</div><h2>Nở hoa</h2><p>Và rồi một sáng, khu vườn của bạn tự kể câu chuyện của nó. Hạt Mầm bảo hành nảy mầm 95%.</p><ul><li>Bảo hành nảy mầm</li><li>Tư vấn 24/7</li></ul></div>
+    </div>
+    <div class="plant" id="plant"></div>
+  </div>
+  <div class="shade"></div>
+</section>
+
+<!-- ===== 7. CUỐI ===== -->
+<section class="scene" id="s-final" data-len="3" data-enter="circle" data-name="Gieo ngay">
+  <div class="stage">
+    <div class="final-inner" id="finalInner">
+      <div class="seal"><svg viewBox="0 0 200 200"><defs><path id="cp" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs><circle cx="100" cy="100" r="96" fill="#ffd166"/><text font-size="17" font-weight="800" letter-spacing="3.4" fill="#2a0f3c"><textPath href="#cp">HẠT THUẦN CHỦNG · NẢY MẦM 95% · </textPath></text><g transform="translate(100 104)"><ellipse rx="16" ry="24" fill="#7a4a14"/><path d="M0-22 C10-46 30-48 38-40 C26-30 12-28 0-22Z" fill="#2e8b57"/><path d="M0-22 C-8-40 -24-44 -30-38 C-20-30 -10-28 0-22Z" fill="#4caf50"/></g></svg></div>
+      <div class="marquee" id="marquee"></div>
+      <div class="final-grid">
+        <div>
+          <h3>Nhận lịch gieo trồng theo mùa và 10% cho đơn đầu tiên.</h3>
+          <form class="news" id="newsForm"><input type="email" placeholder="email@cua-ban.vn" required><button>Đăng ký</button></form>
+          <p style="opacity:.6;font-size:13px;margin-top:14px">Đây là cửa hàng minh họa, không có giao dịch thật.</p>
+        </div>
+        <div class="perks">
+          <div class="perk"><b>200+</b><span>giống hạt tuyển chọn</span></div>
+          <div class="perk"><b>95%</b><span>tỉ lệ nảy mầm bảo hành</span></div>
+          <div class="perk"><b>2h</b><span>giao nhanh nội thành</span></div>
+          <div class="perk"><b>0đ</b><span>ship đơn từ 199.000đ</span></div>
+        </div>
+      </div>
+      <footer>
+        <div><h4>Hạt Mầm Atelier</h4>Xưởng hạt giống thủ công.<br>Gieo chậm, sống xanh.</div>
+        <div><h4>Cửa hàng</h4><a href="#" data-go="0">Cây thân gỗ</a><a href="#" data-go="1">Hoa</a><a href="#" data-go="2">Rau củ</a><a href="#" data-go="3">Thảo mộc</a></div>
+        <div><h4>Hỗ trợ</h4><a href="#" data-go="5">Hướng dẫn gieo</a><a href="#">Bảo hành</a><a href="#">Vận chuyển</a></div>
+        <div><h4>Theo dõi</h4><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">Facebook</a></div>
+      </footer>
+      <div class="footer-big">Hạt Mầm.</div>
+      <div class="copy"><span>© 2026 Hạt Mầm Atelier, cửa hàng minh họa</span><span id="toTop" style="cursor:pointer">Về đầu trang ↑</span></div>
+    </div>
+  </div>
+  <div class="shade"></div>
+</section>
+
+<canvas id="fx"></canvas>
+<div id="grain"></div>
+
+<header class="nav">
+  <a class="brand" href="#" id="brand"><b>Hạt Mầm</b><small>Ấn bản Mùa Gieo ’26</small></a>
+  <div class="nav-right">
+    <button class="pill" id="shopBtn">Cửa hàng</button>
+    <button class="pill dark" id="cartBtn">Giỏ hàng <span class="badge" id="badge">0</span></button>
+  </div>
+</header>
+<ul class="chapters" id="chapters"></ul>
+<div class="progress"><i id="prog"></i></div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer">
+  <div class="dr-head"><h3>Giỏ hạt giống</h3><button class="x" id="closeCart">×</button></div>
+  <div class="dr-list" id="cartList"></div>
+  <div class="dr-foot">
+    <div class="sum"><span>Tạm tính</span><span id="subTotal">0đ</span></div>
+    <div class="sum"><span>Vận chuyển</span><span id="ship">0đ</span></div>
+    <div class="sum total"><span>Tổng</span><span id="total">0đ</span></div>
+    <button class="checkout" id="checkout">Thanh toán</button>
+  </div>
+</aside>
+<div class="modal" id="modal"><div class="modal-card">
+  <svg viewBox="-100 -100 200 200" id="modalArt"></svg>
+  <h3>Cảm ơn bạn!</h3>
+  <p>Đơn hàng minh họa đã được ghi nhận. Hạt giống của bạn đang “lên đường” 🌱</p>
+  <button class="checkout" id="modalOk" style="margin-top:14px">Tiếp tục dạo vườn</button>
+</div></div>
+<div class="toast" id="toast"></div>
+<div class="cur-ring" id="curRing"></div><div class="cur-dot" id="curDot"></div>
+<div class="loader" id="loader"><div class="half t"></div><div class="half b"></div>
+  <div class="ctr"><div><svg class="seedspin" viewBox="-30 -30 60 60"><ellipse rx="12" ry="18" fill="#7a4a14"/><path d="M0-16 C8-30 22-30 26-26 C18-18 8-18 0-16Z" fill="#2e8b57"/></svg><b>Hạt Mầm</b><span>Đang gieo khu vườn</span><div class="count" id="count">0%</div></div></div>
+</div>
+
+<script>
+/* =========================================================
+   Helpers
+========================================================= */
+let seed = 20261109;
+const R = () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+const rr = (a, b) => a + R() * (b - a);
+const pick = a => a[Math.floor(R() * a.length)];
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const win = (p, a, b) => clamp((p - a) / (b - a));
+const lerp = (a, b, t) => a + (b - a) * t;
+const eo = t => 1 - Math.pow(1 - t, 3);
+const eio = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const eob = t => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+const mix = (a, b, t) => { const A = hex(a), B = hex(b); return '#' + A.map((v, i) => Math.round(lerp(v, B[i], t)).toString(16).padStart(2, '0')).join(''); };
+const $ = s => document.querySelector(s);
+const vnd = n => n.toLocaleString('vi-VN') + 'đ';
+
+/* =========================================================
+   Painterly trees
+========================================================= */
+const PAL = {
+  pine:   { dark: '#2f4a2c', mid: '#4f6e3a', light: '#8aa65a', trunk: '#5a4330' },
+  cypress:{ dark: '#1d3a28', mid: '#2f5a3c', light: '#567f4e', trunk: '#3e2e22' },
+  oak:    { dark: '#3d5e2f', mid: '#628a3c', light: '#a8c468', trunk: '#5b432f' },
+  cherry: { dark: '#d06a92', mid: '#f2a2bd', light: '#ffd8e6', trunk: '#4a3530' },
+  maple:  { dark: '#a8321e', mid: '#e2662b', light: '#f8ae52', trunk: '#4c3527' },
+  birch:  { dark: '#7fa34a', mid: '#a9c962', light: '#dcec92', trunk: '#f2efe6' },
+  palm:   { dark: '#2e5a35', mid: '#4f8a45', light: '#8cbf5a', trunk: '#8a6a45' },
+};
+const haze = (P, c, t) => Object.fromEntries(Object.entries(P).map(([k, v]) => [k, mix(v, c, t)]));
+const E = (cx, cy, rx, ry, f, o = 1, rot = 0) => `<ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" fill="${f}" opacity="${o}" transform="rotate(${rot.toFixed(1)} ${cx.toFixed(1)} ${cy.toFixed(1)})"/>`;
+const C = (cx, cy, r, f, o = 1) => `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}" fill="${f}" opacity="${o}"/>`;
+
+function trunk(x, y, h, w, lean, col) {
+  return `<path d="M${x - w},${y} C${x - w * .8},${y - h * .5} ${x + lean * .6 - w * .4},${y - h * .75} ${x + lean - w * .3},${y - h} L${x + lean + w * .3},${y - h} C${x + lean * .6 + w * .4},${y - h * .75} ${x + w * .8},${y - h * .5} ${x + w},${y} Z" fill="${col}"/>`;
+}
+function blobCanopy(cx, cy, Rad, P, n = 16) {
+  let g = '';
+  for (let i = 0; i < n; i++) { const a = R() * 6.283, d = Math.sqrt(R()) * Rad * .75; g += C(cx + Math.cos(a) * d * 1.15, cy + Math.sin(a) * d * .8, Rad * rr(.3, .5), P.dark); }
+  for (let i = 0; i < n * .8; i++) { const a = R() * 6.283, d = Math.sqrt(R()) * Rad * .6; g += C(cx + Math.cos(a) * d * 1.1 - Rad * .12, cy + Math.sin(a) * d * .7 - Rad * .14, Rad * rr(.22, .38), P.mid); }
+  for (let i = 0; i < n * .5; i++) { const a = R() * 6.283, d = Math.sqrt(R()) * Rad * .45; g += C(cx + Math.cos(a) * d - Rad * .28, cy + Math.sin(a) * d * .6 - Rad * .3, Rad * rr(.1, .22), P.light, .9); }
+  return g;
+}
+function tree(type, x, y, s, P) {
+  P = P || PAL[type]; let g = '';
+  if (type === 'pine') {
+    const h = rr(270, 360) * s, lean = rr(-40, 40) * s, cx = x + lean, cy = y - h, W = rr(150, 210) * s;
+    g += trunk(x, y, h, 7 * s, lean, P.trunk);
+    g += `<path d="M${cx},${cy + 20 * s} L${cx - W * .5},${cy - 10 * s} M${cx},${cy + 30 * s} L${cx + W * .45},${cy}" stroke="${P.trunk}" stroke-width="${4 * s}" fill="none"/>`;
+    for (let i = 0; i < 11; i++) { const ex = cx + rr(-W, W) * .78, ey = cy + rr(-28, 14) * s, rx = rr(50, 95) * s; g += E(ex, ey, rx, rx * rr(.26, .38), P.dark, 1, rr(-6, 6)); }
+    for (let i = 0; i < 9; i++) { const ex = cx + rr(-W, W) * .7, ey = cy + rr(-40, -2) * s, rx = rr(36, 70) * s; g += E(ex, ey, rx, rx * rr(.22, .32), P.mid, 1, rr(-6, 6)); }
+    for (let i = 0; i < 6; i++) { const ex = cx + rr(-W, W * .4) * .6, ey = cy + rr(-46, -20) * s, rx = rr(20, 44) * s; g += E(ex, ey, rx, rx * .25, P.light, .85); }
+  } else if (type === 'cypress') {
+    const h = rr(300, 470) * s, w = rr(38, 58) * s;
+    g += `<rect x="${x - 4 * s}" y="${y - 30 * s}" width="${8 * s}" height="${30 * s}" fill="${P.trunk}"/>`;
+    g += `<path d="M${x - w * .55},${y - 20 * s} C${x - w * 1.05},${y - h * .45} ${x - w * .3},${y - h * .85} ${x},${y - h} C${x + w * .35},${y - h * .85} ${x + w * 1.05},${y - h * .45} ${x + w * .55},${y - 20 * s} Z" fill="${P.dark}"/>`;
+    g += `<path d="M${x - w * .35},${y - 40 * s} C${x - w * .8},${y - h * .45} ${x - w * .3},${y - h * .8} ${x - w * .05},${y - h * .95} C${x - w * .05},${y - h * .7} ${x - w * .05},${y - h * .4} ${x - w * .1},${y - 40 * s} Z" fill="${P.mid}"/>`;
+    for (let i = 0; i < 7; i++) g += E(x - w * rr(.1, .45), y - h * rr(.2, .85), w * .18, w * .06, P.light, .7, -30);
+  } else if (type === 'oak' || type === 'maple' || type === 'cherry') {
+    const h = rr(180, 240) * s, lean = rr(-20, 20) * s, Rad = rr(95, 130) * s * (type === 'cherry' ? .9 : 1);
+    g += trunk(x, y, h, 10 * s, lean, P.trunk);
+    g += `<path d="M${x + lean * .6},${y - h * .7} q${-30 * s},${-30 * s} ${-60 * s},${-40 * s} M${x + lean * .7},${y - h * .8} q${30 * s},${-20 * s} ${55 * s},${-45 * s}" stroke="${P.trunk}" stroke-width="${5 * s}" fill="none"/>`;
+    g += blobCanopy(x + lean, y - h - Rad * .3, Rad, P, type === 'cherry' ? 20 : 16);
+  } else if (type === 'birch') {
+    const h = rr(260, 330) * s;
+    g += `<path d="M${x - 5 * s},${y} L${x - 3 * s},${y - h} L${x + 3 * s},${y - h} L${x + 5 * s},${y}Z" fill="${P.trunk}"/>`;
+    for (let i = 0; i < 9; i++) g += `<rect x="${x - 5 * s}" y="${y - rr(10, h * .9)}" width="${rr(4, 9) * s}" height="${2 * s}" fill="#2b2b2b" opacity=".75"/>`;
+    for (let k = 0; k < 3; k++) g += blobCanopy(x + rr(-30, 30) * s, y - h * rr(.6, .95), rr(45, 65) * s, P, 9);
+  } else if (type === 'palm') {
+    const h = rr(260, 340) * s, lean = rr(30, 70) * s * (R() > .5 ? 1 : -1), tx = x + lean, ty = y - h;
+    g += `<path d="M${x},${y} Q${x + lean * .2},${y - h * .6} ${tx},${ty}" stroke="${P.trunk}" stroke-width="${11 * s}" fill="none" stroke-linecap="round"/>`;
+    for (let i = 0; i < 9; i++) { const a = -Math.PI + i * Math.PI / 8 + rr(-.1, .1), L = rr(90, 130) * s, ex = tx + Math.cos(a) * L, ey = ty + Math.sin(a) * L * .4 + L * .45; g += `<path d="M${tx},${ty} Q${tx + Math.cos(a) * L * .55},${ty + Math.sin(a) * L * .7 - 20 * s} ${ex},${ey}" stroke="${i % 2 ? P.dark : P.mid}" stroke-width="${9 * s}" fill="none" stroke-linecap="round"/>`; }
+  }
+  return g;
+}
+
+/* =========================================================
+   Flowers
+========================================================= */
+const pt = (len, wid, rot, fill, op = 1, ty = 0) => `<path d="M0 0 C${wid} ${-len * .25} ${wid * .9} ${-len * .85} 0 ${-len} C${-wid * .9} ${-len * .85} ${-wid} ${-len * .25} 0 0Z" transform="rotate(${rot}) translate(0 ${ty})" fill="${fill}" opacity="${op}"/>`;
+function head(type, s = 1) {
+  let g = `<g transform="scale(${s})">`;
+  if (type === 'daisy') {
+    for (let i = 0; i < 18; i++) g += pt(82, 11, i * 20 + 10, '#efe2c9');
+    for (let i = 0; i < 18; i++) g += pt(78, 12, i * 20, '#fffaf0');
+    g += C(0, 0, 24, '#f2a91a') + C(-5, -5, 14, '#ffd04a');
+  } else if (type === 'sunflower') {
+    for (let i = 0; i < 24; i++) g += pt(88, 15, i * 15, '#e89a00');
+    for (let i = 0; i < 24; i++) g += pt(72, 13, i * 15 + 7.5, '#ffc928');
+    g += C(0, 0, 40, '#4a2a12') + C(0, 0, 32, '#6b3e1c');
+    for (let i = 0; i < 40; i++) { const a = i * 2.4, d = Math.sqrt(i) * 4.6; g += C(Math.cos(a) * d, Math.sin(a) * d, 2.2, '#2d170a'); }
+  } else if (type === 'rose') {
+    for (let i = 0; i < 6; i++) g += pt(74, 46, i * 60, '#a8122f');
+    for (let i = 0; i < 6; i++) g += pt(60, 38, i * 60 + 30, '#d0233f');
+    for (let i = 0; i < 5; i++) g += pt(42, 28, i * 72 + 12, '#ec4664');
+    g += C(0, 0, 17, '#b1152f') + `<path d="M-10 2 C-10 -12 12 -12 10 2 C8 12 -4 10 -3 0" stroke="#ff8aa0" stroke-width="3.5" fill="none"/>`;
+  } else if (type === 'tulip') {
+    g += `<path d="M-46 -10 C-56 -70 -20 -88 0 -70 C20 -88 56 -70 46 -10 C40 30 -40 30 -46 -10Z" fill="#e2353a"/>`;
+    g += `<path d="M-30 -8 C-36 -60 -6 -90 4 -84 C-2 -60 6 -20 -6 22 C-20 20 -28 10 -30 -8Z" fill="#ff6b4a"/>`;
+    g += `<path d="M30 -8 C36 -55 14 -82 6 -80 C12 -55 6 -18 12 20 C22 16 28 8 30 -8Z" fill="#c4202a"/>`;
+    g += `<path d="M-14 -50 C-12 -66 -4 -72 2 -74" stroke="#ffb199" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+  } else if (type === 'peony') {
+    for (let i = 0; i < 9; i++) g += pt(80, 40, i * 40, '#ff6fae');
+    for (let i = 0; i < 9; i++) g += pt(56, 30, i * 40 + 20, '#ffa3cc');
+    for (let i = 0; i < 6; i++) g += pt(30, 18, i * 60, '#ffd6e8');
+    g += C(0, 0, 10, '#ffd54a');
+  } else if (type === 'lavender') {
+    g += `<path d="M0 60 L0 -110" stroke="#5f7a4a" stroke-width="5"/>`;
+    for (let j = 0; j < 16; j++) { const y = 40 - j * 9.5, w = 15 - j * .55; g += E(-6, y, w * .65, w * .45, j % 2 ? '#8a6cd1' : '#a98ce6', 1, -25) + E(6, y - 4, w * .65, w * .45, j % 2 ? '#a98ce6' : '#7656c2', 1, 25); }
+  } else if (type === 'lotus') {
+    for (let a = -80; a <= 80; a += 20) g += pt(84, 24, a, '#f27aa8', 1, 20);
+    for (let a = -60; a <= 60; a += 20) g += pt(70, 22, a, '#ffb8d2', 1, 20);
+    for (let a = -30; a <= 30; a += 15) g += pt(52, 16, a, '#fff0f6', 1, 20);
+    g += E(0, 18, 18, 7, '#ffd34a');
+  }
+  return g + '</g>';
+}
+
+/* =========================================================
+   Veg / herb / fruit icons (viewBox -100 -100 200 200)
+========================================================= */
+const ICON = {
+  tomato: () => `${E(0, 12, 74, 66, '#d92a24')}${E(-6, 8, 66, 58, '#ef3e30')}${E(-28, -14, 18, 10, '#ff9a86', .8, -30)}<path d="M0 -52 L12 -66 L8 -48 L30 -54 L12 -40 L26 -26 L4 -36 L0 -20 L-6 -36 L-28 -28 L-12 -42 L-32 -54 L-8 -48 L-14 -68Z" fill="#2f8a3a"/><path d="M0 -52 Q4 -70 12 -80" stroke="#2f6a2a" stroke-width="5" fill="none"/>`,
+  carrot: () => `<path d="M-6 -50 Q-30 -95 -20 -100 Q-2 -80 0 -55Z" fill="#3c9a3e"/><path d="M2 -52 Q10 -100 26 -96 Q20 -70 6 -50Z" fill="#56b347"/><path d="M-4 -50 Q-4 -95 6 -98 Q6 -70 4 -50Z" fill="#2f7f33"/><path d="M-34 -48 Q0 -62 34 -48 L6 92 Q0 100 -6 92Z" fill="#f2832a"/><path d="M-30 -46 Q-10 -54 4 -52 L-2 88Z" fill="#ffa24a"/><path d="M-20 -14 h16 M8 8 h14 M-12 34 h12 M4 58 h8" stroke="#c45f15" stroke-width="3.5" stroke-linecap="round"/>`,
+  pumpkin: () => `<rect x="-7" y="-78" width="14" height="28" rx="5" fill="#6b4a2a"/>${E(-44, 8, 40, 62, '#d8661c')}${E(44, 8, 40, 62, '#d8661c')}${E(-22, 8, 38, 66, '#f08a2c')}${E(22, 8, 38, 66, '#f08a2c')}${E(0, 8, 32, 68, '#ff9f3d')}${E(-6, -20, 10, 26, '#ffc27a', .55)}`,
+  pepper: () => `<g transform="translate(-42 10) rotate(-12)"><path d="M-30 -30 Q-36 40 0 60 Q36 40 30 -30 Q0 -44 -30 -30Z" fill="#2f9a3e"/></g><g transform="translate(42 10) rotate(12)"><path d="M-30 -30 Q-36 40 0 60 Q36 40 30 -30 Q0 -44 -30 -30Z" fill="#f6c021"/></g><g transform="translate(0 -4)"><path d="M-34 -32 Q-40 46 0 68 Q40 46 34 -32 Q0 -48 -34 -32Z" fill="#e0262f"/><path d="M-20 -28 Q-24 20 -10 50" stroke="#ff8086" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M0 -40 Q4 -60 16 -66" stroke="#2f6a2a" stroke-width="7" fill="none" stroke-linecap="round"/></g>`,
+  lettuce: () => { let g = ''; const cs = ['#3f8f3a', '#5aae45', '#7cc85a', '#a6de7a', '#d0f0a0']; cs.forEach((c, i) => { const r = 78 - i * 15; for (let k = 0; k < 9; k++) { const a = k * .7 + i; g += C(Math.cos(a) * r * .35, Math.sin(a) * r * .3 + 8, r * .55, c); } }); return g; },
+  sprig: (c1, c2, kind) => {
+    let g = `<path d="M0 95 Q-10 20 0 -90" stroke="#4a6b2a" stroke-width="5" fill="none"/>`;
+    for (let i = 0; i < 6; i++) {
+      const y = 70 - i * 30, L = (kind === 'needle' ? 42 : 52) - i * 5, W = kind === 'needle' ? 5 : kind === 'round' ? L * .55 : L * .42;
+      [-1, 1].forEach(sd => g += `<g transform="translate(${-3 + i * .6} ${y}) rotate(${sd * (kind === 'needle' ? 62 : 55)})">${pt(L, W, 0, sd > 0 ? c1 : c2)}<path d="M0 0 L0 ${-L * .85}" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/></g>`);
+    }
+    return g + `<g transform="translate(0 -88)">${pt(30, kind === 'needle' ? 5 : 15, 0, c1)}</g>`;
+  },
+  strawberry: () => { let g = `<path d="M0 88 C-70 40 -78 -30 -40 -48 C-20 -56 -8 -50 0 -44 C8 -50 20 -56 40 -48 C78 -30 70 40 0 88Z" fill="#df2341"/><path d="M-30 -36 C-56 -10 -50 30 -14 66" stroke="#ff6680" stroke-width="8" fill="none" stroke-linecap="round" opacity=".6"/>`; for (let i = 0; i < 22; i++) { const x = rr(-46, 46), y = rr(-30, 60); if (Math.abs(x) < 52 - (y + 30) * .45) g += E(x, y, 3, 5, '#ffd34a'); } return g + `<path d="M0 -44 L-32 -66 L-12 -50 L-20 -78 L0 -54 L20 -78 L12 -50 L32 -66Z" fill="#2f8a3a"/>`; },
+  melon: () => { let g = `<rect x="-5" y="-92" width="10" height="22" rx="4" fill="#6b5a2a"/>${C(0, 6, 78, '#a9b866')}${C(-6, 0, 70, '#c3d07c')}`; for (let i = -3; i <= 3; i++) g += `<path d="M${i * 20} -66 Q${i * 26} 6 ${i * 20} 78" stroke="#eef2c9" stroke-width="2.5" fill="none" opacity=".8"/><path d="M-70 ${i * 20} Q0 ${i * 26} 70 ${i * 20}" stroke="#eef2c9" stroke-width="2.5" fill="none" opacity=".7"/>`; return g; },
+  passion: () => { let g = `${C(-18, -8, 62, '#4b1e52')}${C(-30, -22, 18, '#7b4482', .7)}<g transform="translate(36 34)">${C(0, 0, 48, '#3b1440')}${C(0, 0, 40, '#f6f0d8')}${C(0, 0, 34, '#ffc21a')}`; for (let i = 0; i < 18; i++) { const a = i * .9, d = 8 + (i % 3) * 8; g += C(Math.cos(a) * d, Math.sin(a) * d, 3.6, '#2a1a0a'); } return g + '</g>'; },
+  watermelon: () => { let g = `<path d="M-90 -20 A90 90 0 0 0 90 -20Z" fill="#2f7a2e"/><path d="M-80 -20 A80 80 0 0 0 80 -20Z" fill="#f3f7d8"/><path d="M-72 -20 A72 72 0 0 0 72 -20Z" fill="#ffc83d"/>`; for (let i = 0; i < 9; i++) { const a = .3 + i * .3, d = 40; g += E(Math.cos(a) * d * (i % 2 ? 1 : .6), -10 + Math.sin(a) * d * .8, 3.5, 6, '#2a1a0a', 1, i * 20); } return g; },
+};
+function iconSVG(kind, vb = '-100 -100 200 200') {
+  let inner;
+  if (PAL[kind] && kind !== 'birch') inner = tree(kind, 100, 225, .5);
+  else if (ICON[kind]) inner = ICON[kind]();
+  else if (kind.startsWith('h:')) { const [_, c1, c2, k] = kind.split(':'); inner = ICON.sprig(c1, c2, k); }
+  else inner = head(kind, 1.05);
+  if (PAL[kind]) vb = '-20 -50 240 280';
+  return `<svg viewBox="${vb}">${inner}</svg>`;
+}
+
+/* =========================================================
+   Products
+========================================================= */
+const P = [
+  // trees
+  { id: 't1', cat: 'tree', icon: 'pine', name: 'Thông Ý tán dù', latin: 'Pinus pinea', price: 45000, c1: '#cfe3b8', c2: '#8fb36e', tag: 'Mới' },
+  { id: 't2', cat: 'tree', icon: 'maple', name: 'Phong lá đỏ', latin: 'Acer palmatum', price: 65000, c1: '#ffd4b0', c2: '#f08a5a' },
+  { id: 't3', cat: 'tree', icon: 'cherry', name: 'Anh đào Nhật', latin: 'Prunus serrulata', price: 79000, c1: '#ffe1ec', c2: '#f7a8c4', tag: 'Hot' },
+  { id: 't4', cat: 'tree', icon: 'cypress', name: 'Bách tán Ý', latin: 'Cupressus sempervirens', price: 39000, c1: '#d6ead6', c2: '#7fae8a' },
+  // flowers
+  { id: 'f1', cat: 'flower', icon: 'rose', name: 'Hồng cổ Hà Nội', latin: 'Rosa chinensis', price: 35000, c1: '#ffd9df', c2: '#ff8fa3', tag: 'Bán chạy' },
+  { id: 'f2', cat: 'flower', icon: 'sunflower', name: 'Hướng dương lùn', latin: 'Helianthus annuus', price: 25000, c1: '#fff1b8', c2: '#ffc94a' },
+  { id: 'f3', cat: 'flower', icon: 'tulip', name: 'Tulip Hà Lan', latin: 'Tulipa gesneriana', price: 89000, c1: '#ffe0d2', c2: '#ff8a6a' },
+  { id: 'f4', cat: 'flower', icon: 'lavender', name: 'Oải hương Pháp', latin: 'Lavandula stoechas', price: 55000, c1: '#ece2ff', c2: '#b39ae8' },
+  { id: 'f5', cat: 'flower', icon: 'daisy', name: 'Cúc họa mi', latin: 'Leucanthemum', price: 22000, c1: '#f4f7ff', c2: '#bfd4ff' },
+  { id: 'f6', cat: 'flower', icon: 'lotus', name: 'Sen mini Nhật', latin: 'Nelumbo nucifera', price: 69000, c1: '#ffe6f0', c2: '#ffa8c8' },
+  { id: 'f7', cat: 'flower', icon: 'peony', name: 'Mẫu đơn hồng', latin: 'Paeonia lactiflora', price: 99000, c1: '#ffe0ef', c2: '#ff7fb8', tag: 'Hiếm' },
+  // veg
+  { id: 'v1', cat: 'veg', icon: 'tomato', name: 'Cà chua bi đỏ', latin: 'Solanum lycopersicum', price: 18000, c1: '#ffe0d6', c2: '#ff8a70' },
+  { id: 'v2', cat: 'veg', icon: 'carrot', name: 'Cà rốt baby', latin: 'Daucus carota', price: 15000, c1: '#ffe9cc', c2: '#ffb064' },
+  { id: 'v3', cat: 'veg', icon: 'pumpkin', name: 'Bí ngô Mỹ', latin: 'Cucurbita pepo', price: 29000, c1: '#ffefc4', c2: '#ffbf5a', tag: 'F1' },
+  { id: 'v4', cat: 'veg', icon: 'pepper', name: 'Ớt chuông 3 màu', latin: 'Capsicum annuum', price: 32000, c1: '#e8f6d6', c2: '#a8d67a' },
+  { id: 'v5', cat: 'veg', icon: 'lettuce', name: 'Xà lách xoăn', latin: 'Lactuca sativa', price: 12000, c1: '#effad8', c2: '#b6e08a' },
+  // herbs
+  { id: 'h1', cat: 'herb', icon: 'h:#3fae4f:#2d8a3c:round', name: 'Húng quế Thái', latin: 'Ocimum basilicum', price: 15000 },
+  { id: 'h2', cat: 'herb', icon: 'h:#6fe08a:#45c06a:pointy', name: 'Bạc hà Âu', latin: 'Mentha spicata', price: 19000 },
+  { id: 'h3', cat: 'herb', icon: 'h:#a14fb8:#5aa04a:round', name: 'Tía tô Nhật', latin: 'Perilla frutescens', price: 17000, tag: 'Mới' },
+  { id: 'h4', cat: 'herb', icon: 'h:#7fb08a:#5a8f6e:needle', name: 'Hương thảo', latin: 'Salvia rosmarinus', price: 39000 },
+  // fruits
+  { id: 'r1', cat: 'fruit', icon: 'strawberry', name: 'Dâu tây Mỹ', latin: 'Fragaria × ananassa', price: 49000, c1: '#ffe0e4', c2: '#ff8a9a', tag: 'Hot' },
+  { id: 'r2', cat: 'fruit', icon: 'melon', name: 'Dưa lưới Nhật', latin: 'Cucumis melo', price: 59000, c1: '#f2f6d8', c2: '#c8d886' },
+  { id: 'r3', cat: 'fruit', icon: 'passion', name: 'Chanh dây tím', latin: 'Passiflora edulis', price: 25000, c1: '#f0dcf2', c2: '#c48ad0' },
+  { id: 'r4', cat: 'fruit', icon: 'watermelon', name: 'Dưa hấu ruột vàng', latin: 'Citrullus lanatus', price: 35000, c1: '#fff3c8', c2: '#9fd38a' },
+];
+const byId = Object.fromEntries(P.map(p => [p.id, p]));
+function packet(p) {
+  return `<div class="packet" style="--c1:${p.c1 || '#fff'};--c2:${p.c2 || '#ddd'}">
+    ${p.tag ? `<span class="tag">${p.tag}</span>` : ''}
+    <div class="zig"></div>
+    <div class="pk-art">${iconSVG(p.icon)}</div>
+    <div class="pk-meta"><span class="pk-latin">${p.latin}</span><h3>${p.name}</h3>
+      <div class="pk-row"><b>${vnd(p.price)}<small>gói 50 hạt</small></b><button class="add" data-id="${p.id}">+ Thêm</button></div></div></div>`;
+}
+
+/* =========================================================
+   Build: split titles
+========================================================= */
+document.querySelectorAll('[data-split]').forEach(el => {
+  const t = el.textContent.normalize('NFC'); el.textContent = '';
+  Array.from(t).forEach(ch => { const s = document.createElement('span'); s.className = 'ch'; s.textContent = ch === ' ' ? ' ' : ch; el.appendChild(s); });
+});
+const chars = id => [...document.querySelectorAll(`#${id} .ch`)];
+
+/* clouds helper */
+function clouds(container, n, opts = {}) {
+  const arr = [];
+  for (let i = 0; i < n; i++) {
+    const g = document.createElement('div'); g.style.position = 'absolute'; g.style.left = rr(-10, 90) + '%'; g.style.top = rr(opts.top0 ?? 0, opts.top1 ?? 40) + '%';
+    const w = rr(opts.w0 ?? 14, opts.w1 ?? 30);
+    for (let k = 0; k < 6; k++) { const c = document.createElement('div'); c.className = 'cloud'; const cw = w * rr(.4, .75); c.style.width = cw + 'vw'; c.style.height = cw * rr(.55, .8) + 'vw'; c.style.left = rr(0, w * .6) + 'vw'; c.style.top = rr(-2, 3) + 'vw'; if (opts.tint) c.style.background = `radial-gradient(closest-side,${opts.tint},rgba(255,255,255,0))`; g.appendChild(c); }
+    container.appendChild(g); arr.push({ el: g, speed: rr(.4, 1.2), off: rr(0, 100) });
+  }
+  return arr;
+}
+
+/* ---------- Forest ---------- */
+const SKY = '#c9dbe0';
+(function buildForest() {
+  // far
+  let s = `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">
+    <path d="M0 560 Q200 470 380 520 T760 500 T1150 470 T1600 520 V900 H0Z" fill="#a9c0c8"/>
+    <path d="M0 610 Q260 540 520 590 T1050 570 T1600 600 V900 H0Z" fill="#9db69a"/>`;
+  const types = ['pine', 'cypress', 'oak', 'cypress', 'pine', 'oak', 'cherry'];
+  for (let i = 0; i < 26; i++) { const t = pick(types); s += tree(t, rr(0, 1600), rr(600, 640), rr(.28, .42), haze(PAL[t], SKY, .55)); }
+  $('#fFar').innerHTML = s + '</svg>';
+  // mid
+  s = `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">
+    <defs><linearGradient id="mh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#86a85a"/><stop offset="1" stop-color="#5b7d3c"/></linearGradient></defs>
+    <path d="M0 700 Q300 640 640 690 T1300 670 T1600 690 V900 H0Z" fill="url(#mh)"/>`;
+  const mt = ['pine', 'cypress', 'oak', 'cherry', 'maple', 'birch', 'palm', 'cypress', 'pine', 'maple', 'cherry', 'oak', 'birch', 'palm', 'cypress'];
+  mt.forEach((t, i) => { s += tree(t, 60 + i * 105 + rr(-30, 30), rr(700, 740), rr(.55, .78), haze(PAL[t], SKY, .2)); });
+  for (let i = 0; i < 60; i++) s += C(rr(0, 1600), rr(730, 800), rr(2, 4), pick(['#ffd34a', '#ff8fb1', '#fff', '#c99cff']), .9);
+  $('#fMid').innerHTML = s + '</svg>';
+  // near
+  s = `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">`;
+  s += tree('cypress', 70, 940, 1.35) + tree('pine', 250, 950, 1.6) + tree('birch', 1180, 950, 1.0) + tree('maple', 1370, 960, 1.2) + tree('cypress', 1530, 950, 1.4);
+  s += `<path d="M0 860 Q200 800 420 850 Q600 820 800 880 Q1050 820 1250 860 Q1450 810 1600 850 V900 H0Z" fill="#33502a"/>`;
+  for (let i = 0; i < 40; i++) s += C(rr(0, 1600), rr(850, 900), rr(18, 42), pick(['#2a4422', '#3c5f2e', '#4d7536']));
+  for (let i = 0; i < 70; i++) s += C(rr(0, 1600), rr(840, 895), rr(3, 6), pick(['#ffd34a', '#ff6f9c', '#fff6e0', '#ff9a3d']));
+  $('#fNear').innerHTML = s + '</svg>';
+  $('#treeRow').innerHTML = P.filter(p => p.cat === 'tree').map(packet).join('');
+})();
+const forestClouds = clouds($('#forestClouds'), 7, { top0: 2, top1: 30 });
+const puffs = [];
+for (let i = 0; i < 34; i++) { const d = document.createElement('div'); d.className = 'puff'; const sz = rr(110, 220); d.style.width = d.style.height = sz + 'px'; d.style.marginLeft = d.style.marginTop = -sz / 2 + 'px'; $('#puffs').appendChild(d); puffs.push({ el: d, a: i / 34 * Math.PI * 2 + rr(-.05, .05), j: rr(-.08, .1) }); }
+
+/* ---------- Flowers ---------- */
+const flowerClouds = clouds($('#flowerClouds'), 8, { top0: 0, top1: 45, w0: 18, w1: 34 });
+$('#flowerHills').innerHTML = `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" style="width:100%;height:100%">
+  <path d="M0 640 Q300 560 620 620 T1250 590 T1600 620 V900 H0Z" fill="#c9b3e8" opacity=".8"/>
+  <path d="M0 700 Q400 630 800 690 T1600 670 V900 H0Z" fill="#a8d59a"/>
+  <path d="M0 780 Q500 720 1000 770 T1600 760 V900 H0Z" fill="#7fbf6a"/></svg>`;
+const FL = [];
+(function buildFlowers() {
+  const types = ['rose', 'sunflower', 'tulip', 'lavender', 'daisy', 'peony', 'lotus', 'sunflower', 'rose', 'tulip', 'daisy', 'lavender', 'peony'];
+  let s = `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">`;
+  const n = types.length;
+  types.forEach((t, i) => {
+    const x = 70 + i * (1460 / (n - 1)) + rr(-30, 30), h = rr(260, 540) * (i % 2 ? .82 : 1), sc = rr(.75, 1.15), bend = rr(-50, 50), hx = x + bend, hy = 940 - h;
+    s += `<g class="fl"><g class="st"><path d="M${x} 960 Q${x + bend * .2} ${940 - h * .5} ${hx} ${hy}" stroke="#3f7a35" stroke-width="${7 * sc}" fill="none" stroke-linecap="round"/>
+      <g transform="translate(${x + bend * .12} ${940 - h * .35}) rotate(-40)">${pt(70 * sc, 22 * sc, 0, '#4f9a3f')}</g>
+      <g transform="translate(${x + bend * .16} ${940 - h * .5}) rotate(45)">${pt(60 * sc, 18 * sc, 0, '#5fae4a')}</g></g>
+      <g transform="translate(${hx} ${hy})"><g class="hd">${head(t, sc)}</g></g></g>`;
+  });
+  $('#flowerField').innerHTML = s + '</svg>';
+  document.querySelectorAll('#flowerField .fl').forEach((g, i) => FL.push({ st: g.querySelector('.st'), hd: g.querySelector('.hd'), d: (i * 7 % n) / n }));
+  const items = P.filter(p => p.cat === 'flower');
+  $('#ring').innerHTML = items.map(packet).join('');
+})();
+const ringCards = [...document.querySelectorAll('#ring .packet')];
+
+/* ---------- Veg ---------- */
+$('#tearSvg').innerHTML = (() => { let d = 'M0 60 L0 30'; for (let x = 0; x <= 1600; x += 22) d += ` L${x} ${rr(6, 40)}`; return `<path d="${d} L1600 60Z" fill="#ffcf6e"/><path d="${d.replace(/ (\d+)$/, '')}" fill="none" stroke="#fff6dc" stroke-width="4" opacity=".9"/>`; })();
+$('#vegHills').innerHTML = (() => {
+  let s = `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">
+    <path d="M0 560 Q400 470 800 540 T1600 500 V900 H0Z" fill="#c9a24a"/>
+    <path d="M0 630 Q350 560 760 620 T1600 590 V900 H0Z" fill="#8fa43c"/>`;
+  for (let i = 0; i < 14; i++) s += `<path d="M${-100 + i * 30} 900 Q${400 + i * 60} ${640 + i * 6} ${1700} ${620 + i * 14}" stroke="${i % 2 ? '#6f8a2e' : '#a4b84a'}" stroke-width="10" fill="none" opacity=".7"/>`;
+  s += `<path d="M0 720 Q400 660 900 710 T1600 690 V900 H0Z" fill="#5d7f2a"/>`;
+  for (let i = 0; i < 18; i++) { const t = pick(['cypress', 'oak', 'pine']); s += tree(t, rr(0, 1600), rr(560, 620), rr(.25, .4), haze(PAL[t], '#e8b067', .4)); }
+  return s + '</svg>';
+})();
+const VEG = ['tomato', 'carrot', 'pumpkin', 'pepper', 'lettuce'].map((k, i) => {
+  const d = document.createElement('div'); d.className = 'v'; d.style.left = (8 + i * 18) + '%'; d.innerHTML = `<svg viewBox="-100 -100 200 200">${ICON[k]()}</svg>`; $('#vegPop').appendChild(d); return d;
+});
+$('#vegRow').innerHTML = P.filter(p => p.cat === 'veg').map(packet).join('');
+
+/* ---------- Herbs ---------- */
+const SPR = [['#3fae4f', '#2d8a3c', 'round', 2], ['#6fe08a', '#45c06a', 'pointy', 82], ['#a14fb8', '#5aa04a', 'round', 18], ['#7fb08a', '#5a8f6e', 'needle', 92]].map(([a, b, k, x]) => {
+  const d = document.createElement('div'); d.className = 'sprig'; d.style.left = x + '%'; d.innerHTML = `<svg viewBox="-100 -100 200 200" preserveAspectRatio="xMidYMax meet">${ICON.sprig(a, b, k)}</svg>`; $('#sprigs').appendChild(d); return d;
+});
+$('#herbRow').innerHTML = P.filter(p => p.cat === 'herb').map(packet).join('');
+document.querySelectorAll('#sphere i').forEach((r, i) => r.dataset.i = i);
+
+/* ---------- Fruits ---------- */
+const ocClouds = clouds($('#ocClouds'), 6, { top0: 10, top1: 80, w0: 14, w1: 22 });
+const doveSVG = `<svg viewBox="0 0 120 80"><path class="w2" d="M55 40 C40 10 20 0 4 4 C20 14 30 30 50 46Z" fill="#e8e6f0"/><path d="M20 46 C40 34 70 32 92 38 C102 40 110 36 116 34 C112 42 104 48 94 50 C80 58 50 60 30 54 L8 62 L16 50Z" fill="#fff"/><circle cx="104" cy="40" r="2" fill="#333"/><path d="M114 36 l6 1 -6 3z" fill="#e8a040"/><path class="w1" d="M58 40 C60 8 80 -4 100 0 C86 12 76 28 64 46Z" fill="#fff"/></svg>`;
+const DOVES = [0, 1, 2, 3, 4].map(i => { const d = document.createElement('div'); d.className = 'dove'; d.innerHTML = doveSVG; d.firstChild.querySelectorAll('.w1,.w2').forEach(w => w.style.animationDelay = (-i * .13) + 's'); $('#doves').appendChild(d); return { el: d, y: rr(.12, .7), sp: rr(.8, 1.25), off: i * .27, s: rr(.7, 1.15) }; });
+const HANG = P.filter(p => p.cat === 'fruit').map((p, i) => { const h = document.createElement('div'); h.className = 'hanger'; const L = [30, 46, 38, 52][i]; h.innerHTML = `<div class="string" style="height:${L}vh"></div>${packet(p)}`; $('#hang').appendChild(h); return { el: h, ph: rr(0, 6) }; });
+
+/* ---------- Grow plant ---------- */
+$('#plant').innerHTML = `<svg viewBox="0 0 400 700" preserveAspectRatio="xMidYMax meet">
+  <g class="pot-shadow"><path d="M90 560 L310 560 L285 690 L115 690Z" fill="#c8673a"/><rect x="78" y="540" width="244" height="34" rx="8" fill="#e07a45"/><path d="M100 590 L300 590" stroke="#a9512a" stroke-width="4"/></g>
+  <ellipse cx="200" cy="548" rx="112" ry="12" fill="#4a2a14"/>
+  <g id="gRoots" opacity="0"><path d="M200 552 q-20 40 -50 60 M200 552 q10 50 -6 90 M200 552 q30 30 50 58" stroke="#d8c09a" stroke-width="3" fill="none"/></g>
+  <g id="gSeed"><ellipse cx="200" cy="540" rx="13" ry="19" fill="#7a4a14"/><ellipse cx="196" cy="534" rx="4" ry="8" fill="#b07a3a"/></g>
+  <path id="gStem" d="M200 548 C196 470 214 400 200 330 C188 270 206 210 200 150" stroke="#3f8a3a" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <g id="gL1" style="transform-origin:200px 470px"><g transform="translate(200 470) rotate(-60)">${pt(110, 38, 0, '#4caf50')}</g></g>
+  <g id="gL2" style="transform-origin:204px 400px"><g transform="translate(204 400) rotate(55)">${pt(120, 40, 0, '#3f9a45')}</g></g>
+  <g id="gL3" style="transform-origin:198px 300px"><g transform="translate(198 300) rotate(-50)">${pt(100, 34, 0, '#5fbe5a')}</g></g>
+  <g id="gL4" style="transform-origin:202px 240px"><g transform="translate(202 240) rotate(50)">${pt(90, 30, 0, '#4caf50')}</g></g>
+  <g id="gSprout" style="transform-origin:200px 520px"><g transform="translate(200 524) rotate(-35)">${pt(44, 16, 0, '#7ccf5a')}</g><g transform="translate(200 524) rotate(35)">${pt(44, 16, 0, '#5fbe5a')}</g></g>
+  <g id="gFlower" style="transform-origin:200px 150px"><g transform="translate(200 150)">${head('peony', 1.1)}</g></g>
+</svg>`;
+const stem = $('#gStem'); const stemLen = stem.getTotalLength(); stem.style.strokeDasharray = stemLen;
+
+/* ---------- Final ---------- */
+$('#marquee').innerHTML = Array(6).fill('<span>Gieo ngay</span> <em>✿</em> ').join('');
+$('#modalArt').innerHTML = head('sunflower', 1);
+
+/* =========================================================
+   Scene engine
+========================================================= */
+const SCN = [...document.querySelectorAll('.scene')].map(el => ({ el, stage: el.querySelector('.stage'), shade: el.querySelector('.shade'), len: +el.dataset.len, enter: el.dataset.enter, name: el.dataset.name }));
+let W = innerWidth, H = innerHeight, target = 0, cur = 0, vel = 0, t0 = performance.now(), mx = 0, my = 0, tmx = 0, tmy = 0;
+const ENTER = 1.0; // viewport-heights spent on entrance transitions
+function layout() {
+  W = innerWidth; H = innerHeight; let acc = 0;
+  SCN.forEach(s => { s.start = acc; s.px = s.len * H; acc += s.px; });
+  $('#spacer').style.height = (acc + H) + 'px';
+}
+layout(); addEventListener('resize', layout);
+addEventListener('scroll', () => target = scrollY, { passive: true });
+addEventListener('pointermove', e => { tmx = e.clientX / W * 2 - 1; tmy = e.clientY / H * 2 - 1; });
+
+$('#chapters').innerHTML = SCN.map((s, i) => `<li data-go="${i}">${s.name}</li>`).join('');
+const chapLis = [...document.querySelectorAll('#chapters li')];
+function goTo(i) { const s = SCN[i]; const y = s.start + (s.enter === 'none' ? 0 : ENTER * H) + (i === 0 ? 0 : 2); scrollTo({ top: i === 0 ? 0 : y + s.px * .12, behavior: 'instant' }); }
+document.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (g) { e.preventDefault(); goTo(+g.dataset.go); } });
+$('#brand').onclick = e => { e.preventDefault(); goTo(0); };
+$('#toTop').onclick = () => goTo(0);
+$('#shopBtn').onclick = () => goTo(1);
+
+function applyEnter(s, e) {
+  const k = eio(e), el = s.el;
+  switch (s.enter) {
+    case 'circle': el.style.clipPath = e >= 1 ? 'none' : `circle(${k * Math.hypot(W, H) * .55}px at 50% 50%)`; break;
+    case 'circleTop': el.style.clipPath = e >= 1 ? 'none' : `circle(${k * Math.hypot(W, H) * 1.05}px at 50% 0%)`; break;
+    case 'iris': el.style.clipPath = e >= 1 ? 'none' : `inset(${lerp(38, 0, k)}% ${lerp(40, 0, k)}% round ${lerp(40, 0, k)}px)`; break;
+    case 'tear': el.style.transform = `translateY(${(1 - k) * (H + 70)}px)`; break;
+    case 'slide': el.style.transform = `translateX(${(1 - k) * W}px)`; el.style.boxShadow = '-40px 0 80px rgba(0,0,0,.35)'; break;
+  }
+}
+function letters(arr, t, opt = {}) {
+  arr.forEach((c, i) => {
+    const ti = clamp(t * (1 + arr.length * .09) - i * .09);
+    const b = eob(ti);
+    c.style.opacity = clamp(ti * 1.6);
+    c.style.transform = opt.scale ? `scale(${lerp(opt.scale, 1, eo(ti))}) translateY(${(1 - b) * 30}%)` : `translateY(${(1 - b) * 110}%) rotate(${(1 - ti) * 10}deg)`;
+  });
+}
+function cardsIn(cards, t, from = 'bottom') {
+  cards.forEach((c, i) => {
+    const ti = eo(clamp(t * 1.5 - i * .12)); const sd = i % 2 ? 1 : -1;
+    if (from === 'z') c.style.transform = `translateZ(${(1 - ti) * -900}px) rotateY(${(1 - ti) * sd * 70}deg) translateY(${(1 - ti) * 20}vh)`;
+    else c.style.transform = `translateY(${(1 - ti) * 75}vh) rotateX(${(1 - ti) * -55}deg) rotateZ(${(1 - ti) * sd * 10}deg)`;
+    c.style.opacity = clamp(ti * 2);
+  });
+}
+
+/* per-scene updates — q: 0..1 progress after entrance */
+const F = { title: chars('forestCopy'), cards: [...document.querySelectorAll('#treeRow .packet')] };
+const U = [];
+U[0] = (q, t) => {
+  const e = eio(win(q, 0, .26));
+  const R0 = Math.min(W, H) * .27, R1 = Math.hypot(W, H) * .62, r = lerp(R0, R1, e);
+  $('#portal').style.clipPath = e >= 1 ? 'none' : `circle(${r}px at 50% 55%)`;
+  const po = 1 - win(q, .12, .26);
+  puffs.forEach((p, i) => { const a = p.a + t * .00005 * (i % 2 ? 1 : -1); const rr2 = r * (1 + p.j); p.el.style.transform = `translate(${W / 2 + Math.cos(a) * rr2}px,${H * .55 + Math.sin(a) * rr2}px) scale(${1 + e * .8})`; p.el.style.opacity = po; });
+  const io = win(q, .02, .16); $('#intro').style.opacity = 1 - io; $('#intro').style.transform = `translateY(${-io * 60}px)`;
+  const d = eio(win(q, .26, 1));
+  $('#forestInner').style.transform = `scale(${lerp(1.35, 1, e)})`;
+  $('#fFar').style.transform = `translate(${mx * -6}px,${my * -4 - d * 10}px) scale(${1 + d * .06})`;
+  $('#fMid').style.transform = `translate(${mx * -16}px,${my * -8 - d * 20}px) scale(${1 + d * .2})`;
+  $('#fNear').style.transform = `translate(${mx * -34}px,${my * -14 + d * H * .1}px) scale(${1 + d * .6})`;
+  forestClouds.forEach(c => c.el.style.transform = `translateX(${((t * .004 * c.speed + c.off + q * 30) % 120) - 20}vw)`);
+  letters(F.title, win(q, .22, .42));
+  const out = eio(win(q, .52, .72));
+  $('#forestCopy').style.transform = `translateY(${-out * 9}vh) scale(${1 - out * .38})`;
+  const ld = $('#forestLede'); ld.style.opacity = win(q, .34, .44) * (1 - out); ld.style.transform = `translateY(${(1 - win(q, .34, .44)) * 20}px)`;
+  cardsIn(F.cards, win(q, .58, .95));
+  F.cards.forEach((c, i) => { if (q > .9) c.style.transform += ` translateY(${Math.sin(t * .0015 + i) * 6}px)`; });
+};
+const FLW = { title: chars('hoaTitle') };
+U[1] = (q, t) => {
+  flowerClouds.forEach(c => c.el.style.transform = `translateX(${((t * .003 * c.speed + c.off + q * 50) % 130) - 25}vw) translateY(${-q * 6}vh)`);
+  $('#flowerHills').style.transform = `translateY(${q * 4}vh) translateX(${mx * -10}px)`;
+  FL.forEach((f, i) => {
+    const g = clamp((q - f.d * .18) / .26);
+    f.st.style.transform = `scaleY(${eo(g)})`;
+    const hb = clamp((g - .55) / .45);
+    f.hd.style.transform = `scale(${eob(hb)}) rotate(${(1 - hb) * -140 + Math.sin(t * .0012 + i) * 4}deg)`;
+  });
+  letters(FLW.title, win(q, .04, .28), { scale: 2.6 });
+  const cam = eio(win(q, .42, .66));
+  $('#hoaTitle').style.transform = `translateY(${-cam * 12}vh) scale(${1 - cam * .25}) translateX(${mx * 12}px)`;
+  $('#hoaTitle').style.opacity = 1 - cam * .75;
+  $('#flowerField').style.transform = `translateY(${cam * 26}vh) scale(${1 + cam * .35}) translateX(${mx * -24}px)`;
+  $('#flowerField').style.opacity = 1 - cam * .45;
+  const ci = win(q, .14, .26), co = win(q, .4, .5); $('#flCopy').style.opacity = ci * (1 - co); $('#flCopy').style.transform = `translateY(${(1 - ci) * 30 - co * 30}px)`;
+  const ri = eo(win(q, .44, .64));
+  const ring = $('#ring'), Rr = Math.min(Math.max(W * .3, 300), 480);
+  const rot = -(q - .44) * 520 + mx * 14;
+  ring.style.transform = `translateY(${(1 - ri) * 50}vh) scale(${.55 + ri * .45}) rotateX(${-6 + my * 4}deg) rotateY(${rot}deg)`;
+  ring.style.opacity = ri;
+  ringCards.forEach((c, i) => { const a = i * 360 / ringCards.length; c.style.transform = `rotateY(${a}deg) translateZ(${Rr}px)`; const fa = ((a + rot) % 360 + 360) % 360; const cs = Math.cos(fa * Math.PI / 180); c.style.opacity = .25 + .75 * clamp(cs * .5 + .5); c.style.pointerEvents = cs > .5 ? 'auto' : 'none'; });
+  $('#ringCap').style.opacity = ri;
+};
+const VG = { title: chars('vegTitle'), cards: [...document.querySelectorAll('#vegRow .packet')] };
+U[2] = (q, t) => {
+  $('#sun').style.transform = `translateY(${(1 - eo(win(q, 0, .35))) * 40 - q * 10}vh) scale(${1 + Math.sin(t * .001) * .02})`;
+  $('#vegHills').style.transform = `translate(${mx * -14}px,${-q * 4}vh) scale(${1 + q * .06})`;
+  const bi = win(q, .06, .26); $('#billboard').style.transform = `translateY(${(1 - eo(bi)) * 70}vh) rotate(${(1 - eob(bi)) * -30 + Math.sin(t * .0016) * 1.2}deg)`;
+  letters(VG.title, win(q, .08, .28));
+  const up = eio(win(q, .5, .7));
+  $('#vegTitle').style.transform = `translateY(${-up * 8}vh) scale(${1 - up * .35})`; $('#vegTitle').style.transformOrigin = '0 0';
+  const vc = win(q, .2, .3); $('#vegCopy').style.opacity = vc * (1 - up); $('#vegCopy').style.transform = `translateY(${(1 - vc) * 30}px)`;
+  VEG.forEach((v, i) => {
+    const vi = win(q, .2 + i * .045, .36 + i * .045);
+    const bob = Math.sin(t * .002 + i * 1.3) * 10 * vi;
+    v.style.transform = `translateY(${(1 - eob(vi)) * 60 + up * -22}vh) translateY(${bob}px) rotate(${(1 - vi) * (i % 2 ? 50 : -50) + Math.sin(t * .0013 + i) * 5}deg) scale(${1 - up * .35})`;
+    v.style.opacity = 1 - up * .25;
+  });
+  cardsIn(VG.cards, win(q, .56, .92));
+};
+const HB = { title: chars('herbTitle'), cards: [...document.querySelectorAll('#herbRow .packet')], rings: [...document.querySelectorAll('#sphere i')] };
+U[3] = (q, t) => {
+  letters(HB.title, win(q, .04, .24));
+  const up = eio(win(q, .48, .68));
+  $('#herbTitle').style.transform = `translateY(${-up * 8}vh) scale(${1 - up * .35})`; $('#herbTitle').style.transformOrigin = '0 0';
+  const hc = win(q, .16, .26); $('#herbCopy').style.opacity = hc * (1 - up); $('#herbCopy').style.transform = `translateY(${(1 - hc) * 30}px)`;
+  const si = eo(win(q, 0, .3));
+  $('#sphere').style.transform = `scale(${.3 + si * .7}) rotateX(${20 + my * 10}deg) rotateY(${t * .02 + q * 300 + mx * 20}deg) translateY(${up * -6}vh)`;
+  $('#sphere').style.opacity = si;
+  HB.rings.forEach((r, i) => r.style.transform = i < 3 ? `rotateY(${i * 60}deg)` : `rotateX(${90}deg) scale(${i === 3 ? 1 : .7}) translateZ(${i === 3 ? 0 : 40}px)`);
+  document.querySelectorAll('#s-herb .nebula').forEach((n, i) => n.style.transform = `translate(${Math.sin(t * .0003 + i) * 40 + mx * (i + 1) * -10}px,${Math.cos(t * .0004 + i) * 30 - q * 60}px)`);
+  SPR.forEach((s, i) => { const g = eob(win(q, .1 + i * .05, .35 + i * .05)); s.style.transform = `scaleY(${g}) rotate(${Math.sin(t * .0011 + i) * 3}deg)`; });
+  $('#herbRow').style.perspective = '1400px';
+  cardsIn(HB.cards, win(q, .54, .9), 'z');
+};
+const FR = { title: chars('fruitTitle') };
+U[4] = (q, t) => {
+  const z = eio(win(q, 0, .5));
+  $('#dome').style.transform = `rotate(${q * 70 + mx * 3}deg) scale(${1 + z * 2.4})`;
+  $('#oculus').style.transform = `scale(${1 + z * 2.6}) rotate(${q * 70}deg)`;
+  ocClouds.forEach(c => c.el.style.transform = `translateX(${((t * .003 * c.speed + c.off) % 130) - 25}%)`);
+  DOVES.forEach((d, i) => { const x = ((q * 1.6 * d.sp + d.off + t * .00004 * d.sp) % 1.4) - .2; d.el.style.transform = `translate(${x * W}px,${d.y * H + Math.sin(t * .002 + i) * 14 - z * 40}px) scale(${d.s * (.6 + z * .7)})`; d.el.style.opacity = win(q, .05, .2); });
+  letters(FR.title, win(q, .26, .44));
+  const up = eio(win(q, .5, .66));
+  $('#fruitTitle').style.transform = `translateY(${up * 52}vh) scale(${1 - up * .3})`;
+  $('#fruitTitle').style.opacity = 1 - up * .8;
+  const fc = win(q, .36, .46); $('#fruitCopy').style.opacity = fc * (1 - up); $('#fruitCopy').style.transform = `translateY(${(1 - fc) * 20}px)`;
+  HANG.forEach((h, i) => { const hi = win(q, .5 + i * .05, .74 + i * .05); const swing = Math.sin(t * .0022 + h.ph) * (4 + Math.min(Math.abs(vel) * .06, 18)) * (.4 + (1 - hi) * 2); h.el.style.transform = `translateY(${(1 - eo(hi)) * -110}vh) rotate(${swing}deg)`; });
+};
+const GROW_BG = ['#f6ecd8', '#e4f3d6', '#d9ecf6', '#ffe0ec'];
+U[5] = (q, t) => {
+  const k = eio(q);
+  $('#track').style.transform = `translateX(${-k * 3 * W}px)`;
+  const seg = k * 3, i0 = Math.min(2, Math.floor(seg)); $('#growStage').style.background = mix(GROW_BG[i0], GROW_BG[i0 + 1], seg - i0);
+  [...document.querySelectorAll('#track .panel')].forEach((p, i) => { const d = seg - i; p.style.opacity = 1 - clamp(Math.abs(d) * 1.2) * .85; p.firstElementChild.style.transform = `translateX(${d * 18}vw)`; });
+  const sd = win(q, 0, .2), sp = win(q, .12, .32), gr = win(q, .3, .72), bl = win(q, .7, .9);
+  $('#gSeed').style.transform = `translateY(${-sd * 6}px)`; $('#gSeed').style.opacity = 1 - sp;
+  $('#gRoots').setAttribute('opacity', sd);
+  $('#gSprout').style.transform = `scale(${eob(sp) * (1 - gr)})`;
+  stem.style.strokeDashoffset = stemLen * (1 - eo(gr));
+  ['#gL1', '#gL2', '#gL3', '#gL4'].forEach((id, i) => $(id).style.transform = `scale(${eob(win(gr, .15 + i * .2, .45 + i * .18))}) rotate(${Math.sin(t * .0014 + i) * 3}deg)`);
+  $('#gFlower').style.transform = `scale(${eob(bl)}) rotate(${(1 - bl) * -180 + Math.sin(t * .001) * 4}deg)`;
+  $('#plant').style.transform = `translateX(${mx * -12}px)`;
+};
+U[6] = (q, t) => {
+  const inner = $('#finalInner'); const extra = Math.max(0, inner.scrollHeight - H);
+  inner.style.transform = `translateY(${-eio(win(q, .18, 1)) * extra}px)`;
+  const mq = $('#marquee'); mq.style.transform = `translateX(${-((t * .06 + q * 900) % (mq.scrollWidth / 2))}px)`;
+};
+
+/* =========================================================
+   Particles (leaves / petals / pollen / stars / feathers)
+========================================================= */
+const cv = $('#fx'), cx = cv.getContext('2d'); let DPR = Math.min(devicePixelRatio || 1, 1.6);
+function sizeCv() { cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0); } sizeCv(); addEventListener('resize', sizeCv);
+const MODES = ['leaf', 'petal', 'pollen', 'star', 'feather', 'none', 'petal'];
+let mode = 'leaf'; const parts = [];
+function spawn(p, init) {
+  p.kind = mode; p.x = rr(0, W); p.y = init ? rr(0, H) : (mode === 'pollen' ? H + 20 : -20); if (mode === 'star') p.y = rr(0, H);
+  p.r = mode === 'star' ? rr(.6, 2.2) : mode === 'pollen' ? rr(1.5, 3.5) : rr(5, 11);
+  p.vx = rr(-.4, .4); p.vy = mode === 'pollen' ? rr(-.7, -.3) : mode === 'star' ? 0 : rr(.5, 1.4);
+  p.rot = rr(0, 6.28); p.vr = rr(-.04, .04); p.ph = rr(0, 6.28); p.life = 1; p.a = 0;
+  p.col = mode === 'leaf' ? pick(['#6f9a3a', '#a8c468', '#e2662b', '#f8ae52', '#ffb8d2']) : mode === 'petal' ? pick(['#ff8fb1', '#ffc2d6', '#fff0f6', '#ff6fae']) : mode === 'pollen' ? pick(['#fff1a8', '#ffd34a']) : mode === 'feather' ? '#ffffff' : '#fff8e0';
+}
+for (let i = 0; i < 80; i++) { const p = {}; spawn(p, true); p.a = 1; parts.push(p); }
+let burst = 0;
+function drawParts(t) {
+  cx.clearRect(0, 0, W, H);
+  for (const p of parts) {
+    if (p.kind === 'none') { if (mode !== 'none') spawn(p, false); continue; }
+    if (p.kind !== mode) p.life -= .012; else p.a = Math.min(1, p.a + .02);
+    p.ph += .02; p.x += p.vx + Math.sin(p.ph) * .6 + mx * .3; p.y += p.vy - vel * .015 * (p.kind === 'star' ? .2 : 1); p.rot += p.vr;
+    if (p.kind === 'star') { p.y -= vel * .01; if (p.y < -5) p.y = H + 5; if (p.y > H + 5) p.y = -5; }
+    if (p.life <= 0 || p.y > H + 30 || p.y < -40 || p.x < -40 || p.x > W + 40) { spawn(p, false); if (p.kind === 'star') p.a = 0; continue; }
+    const al = p.a * Math.max(0, p.life);
+    cx.save(); cx.globalAlpha = al; cx.translate(p.x, p.y); cx.rotate(p.rot); cx.fillStyle = p.col;
+    if (p.kind === 'leaf' || p.kind === 'petal') { cx.beginPath(); cx.ellipse(0, 0, p.r, p.r * (p.kind === 'petal' ? .6 : .38) * Math.abs(Math.sin(p.ph * 1.3) + .3), 0, 0, 6.283); cx.fill(); }
+    else if (p.kind === 'pollen') { cx.shadowColor = '#ffd34a'; cx.shadowBlur = 10; cx.beginPath(); cx.arc(0, 0, p.r, 0, 6.283); cx.fill(); }
+    else if (p.kind === 'star') { cx.globalAlpha = al * (.5 + .5 * Math.sin(t * .003 + p.ph * 20)); cx.shadowColor = '#fff'; cx.shadowBlur = 6; cx.beginPath(); cx.arc(0, 0, p.r, 0, 6.283); cx.fill(); }
+    else if (p.kind === 'feather') { cx.globalAlpha = al * .85; cx.beginPath(); cx.ellipse(0, 0, p.r * .9, p.r * .3, 0, 0, 6.283); cx.fill(); }
+    cx.restore();
+  }
+}
+
+/* =========================================================
+   Main loop
+========================================================= */
+let hidden0 = [];
+function frame(now) {
+  const t = now - t0;
+  const prev = cur; cur += (target - cur) * .085; if (Math.abs(target - cur) < .1) cur = target; vel = lerp(vel, cur - prev, .2);
+  mx += (tmx - mx) * .06; my += (tmy - my) * .06;
+  let active = 0;
+  SCN.forEach((s, i) => {
+    const local = cur - s.start; const nx = SCN[i + 1];
+    const enterPx = s.enter === 'none' ? 0 : ENTER * H;
+    const nextE = nx ? clamp((cur - nx.start) / (ENTER * H)) : 0;
+    const vis = (i === 0 ? true : local > 0) && nextE < 1;
+    if (!vis) { if (s.el.style.visibility !== 'hidden') s.el.style.visibility = 'hidden'; return; }
+    s.el.style.visibility = 'visible';
+    if (s.enter !== 'none') applyEnter(s, clamp(local / enterPx));
+    s.stage.style.transform = nextE > 0 ? `scale(${1 - eio(nextE) * .08})` : '';
+    s.shade.style.opacity = eio(nextE) * .55;
+    const q = clamp((local - enterPx) / (s.px - enterPx));
+    if (local > enterPx * .3 || i === 0) active = i;
+    U[i](q, t);
+  });
+  mode = MODES[active];
+  chapLis.forEach((l, i) => l.classList.toggle('on', i === active));
+  const total = SCN[SCN.length - 1].start + SCN[SCN.length - 1].px - H;
+  $('#prog').style.height = clamp(cur / total) * 100 + '%';
+  $('#brand').style.color = (active === 0 && cur < H * .5) || active === 5 ? '#1c1a17' : '#fff';
+  drawParts(t);
+  // cursor
+  curX += (pX - curX) * .18; curY += (pY - curY) * .18;
+  ringEl.style.transform = `translate(${curX}px,${curY}px)`; dotEl.style.transform = `translate(${pX}px,${pY}px)`;
+  requestAnimationFrame(frame);
+}
+
+/* cursor */
+const ringEl = $('#curRing'), dotEl = $('#curDot'); let pX = -100, pY = -100, curX = -100, curY = -100;
+if (matchMedia('(pointer:fine)').matches) {
+  document.body.classList.add('has-cursor');
+  addEventListener('pointermove', e => { pX = e.clientX; pY = e.clientY; });
+  document.addEventListener('pointerover', e => ringEl.classList.toggle('big', !!e.target.closest('button,a,.chapters li,input')));
+} else { ringEl.style.display = dotEl.style.display = 'none'; }
+
+/* =========================================================
+   Cart
+========================================================= */
+const cart = new Map();
+const badge = $('#badge');
+function renderCart() {
+  let n = 0, sub = 0;
+  const list = $('#cartList');
+  if (!cart.size) list.innerHTML = '<div class="empty">Giỏ còn trống.<br>Hãy gieo vài hạt mơ ước ✿</div>';
+  else list.innerHTML = [...cart].map(([id, q]) => { const p = byId[id]; n += q; sub += q * p.price; return `<div class="item"><div class="thumb" style="--c1:${p.c1 || '#e9f6e0'};--c2:${p.c2 || '#9ccf86'}">${iconSVG(p.icon)}</div><div class="nm">${p.name}<small>${vnd(p.price)} · ${p.latin}</small></div><div class="qty"><button data-q="-1" data-id="${id}">−</button>${q}<button data-q="1" data-id="${id}">+</button></div></div>`; }).join('');
+  const ship = sub === 0 || sub >= 199000 ? 0 : 25000;
+  badge.textContent = n; $('#subTotal').textContent = vnd(sub); $('#ship').textContent = ship ? vnd(ship) : 'Miễn phí'; $('#total').textContent = vnd(sub + ship);
+  $('#checkout').disabled = !cart.size;
+}
+function toast(msg) { const el = $('#toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 1800); }
+function flyFrom(btn) {
+  const a = btn.getBoundingClientRect(), b = $('#cartBtn').getBoundingClientRect();
+  const f = document.createElement('div'); f.className = 'fly'; document.body.appendChild(f);
+  const x0 = a.left + a.width / 2 - 13, y0 = a.top + a.height / 2 - 13, x1 = b.left + b.width - 30, y1 = b.top + b.height / 2 - 13;
+  f.animate([{ transform: `translate(${x0}px,${y0}px) scale(1)` }, { transform: `translate(${(x0 + x1) / 2}px,${Math.min(y0, y1) - 160}px) scale(1.4) rotate(180deg)`, offset: .5 }, { transform: `translate(${x1}px,${y1}px) scale(.4) rotate(360deg)` }], { duration: 850, easing: 'cubic-bezier(.5,0,.3,1)' }).onfinish = () => { f.remove(); badge.classList.add('bump'); setTimeout(() => badge.classList.remove('bump'), 300); };
+}
+document.addEventListener('click', e => {
+  const add = e.target.closest('.add');
+  if (add) { const id = add.dataset.id; cart.set(id, (cart.get(id) || 0) + 1); setTimeout(renderCart, 800); flyFrom(add); toast(`Đã thêm “${byId[id].name}” vào giỏ`); return; }
+  const qb = e.target.closest('[data-q]');
+  if (qb) { const id = qb.dataset.id, v = (cart.get(id) || 0) + +qb.dataset.q; v > 0 ? cart.set(id, v) : cart.delete(id); renderCart(); }
+});
+const openCart = o => { $('#drawer').classList.toggle('open', o); $('#scrim').classList.toggle('open', o); };
+$('#cartBtn').onclick = () => openCart(true); $('#closeCart').onclick = () => openCart(false); $('#scrim').onclick = () => openCart(false);
+$('#checkout').onclick = () => { openCart(false); setTimeout(() => { $('#modal').classList.add('open'); const m = mode; mode = 'petal'; parts.forEach(p => { spawn(p, true); p.a = 1; }); setTimeout(() => mode = m, 2500); }, 450); cart.clear(); renderCart(); };
+$('#modalOk').onclick = () => $('#modal').classList.remove('open');
+$('#newsForm').onsubmit = e => { e.preventDefault(); e.target.reset(); toast('Cảm ơn! (Bản minh họa, chưa gửi email thật)'); };
+renderCart();
+
+/* =========================================================
+   Loader → start
+========================================================= */
+history.scrollRestoration = 'manual'; scrollTo(0, 0);
+document.documentElement.style.overflow = 'hidden';
+requestAnimationFrame(frame);
+let c = 0; const cnt = $('#count');
+const iv = setInterval(() => { c = Math.min(100, c + Math.ceil(rr(3, 9))); cnt.textContent = c + '%'; if (c >= 100) { clearInterval(iv); setTimeout(() => { $('#loader').classList.add('done'); document.documentElement.style.overflow = ''; }, 250); } }, 45);
+</script>
+</body>
+</html>
